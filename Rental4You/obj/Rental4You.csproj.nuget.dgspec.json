@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj": {}
+    "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj": {
+    "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj",
+        "projectUniqueName": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj",
         "projectName": "Rental4You",
-        "projectPath": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj",
-        "packagesPath": "C:\\Users\\gonca\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\obj\\",
+        "projectPath": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj",
+        "packagesPath": "C:\\Users\\paulo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\gonca\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\paulo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -46,19 +46,25 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.9, )"
+              "version": "[6.0.10, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[6.0.9, )"
+              "version": "[6.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.9, )"
+              "version": "[6.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.9, )"
+              "version": "[6.0.10, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[6.0.10, )"
             }
           },
           "imports": [
