@@ -12,16 +12,18 @@
 <body>
     <header>
         @if (User.IsInRole("Admin")){
-            <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                <a class="navbar-brand mb-0 h1" asp-area="" asp-controller="Home" asp-action="Index">Rental4You</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item active">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Empresas</a>
-                        </li>
+            <nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand mb-0 ml-2 h1" asp-area="" asp-controller="Home" asp-action="Index">Rental4You</a>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item active">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Empresas</a>
+                            </li>
 
-                    </ul>
-                    <partial name="_LoginPartial" />
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
                 
             </nav>
