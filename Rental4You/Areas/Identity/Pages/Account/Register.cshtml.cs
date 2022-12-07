@@ -109,7 +109,7 @@ namespace Rental4You.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Idade")]
-            [Range(18, 100, ErrorMessage = "Mínimo: 14 anos")]
+            [Range(18, 100, ErrorMessage = "Mínimo: 18 anos")]
             public int Idade { get; set; }
 
             [Required]
