@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj": {}
+    "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj": {}
   },
   "projects": {
-    "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj": {
+    "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj",
+        "projectUniqueName": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj",
         "projectName": "Rental4You",
-        "projectPath": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\Rental4You.csproj",
-        "packagesPath": "C:\\Users\\paulo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\paulo\\OneDrive\\Área de Trabalho\\Rental4You\\Rental4You\\obj\\",
+        "projectPath": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\Rental4You.csproj",
+        "packagesPath": "C:\\Users\\gonca\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gonca\\Documents\\PWeb\\TP\\Rental4You\\Rental4You\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\paulo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gonca\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

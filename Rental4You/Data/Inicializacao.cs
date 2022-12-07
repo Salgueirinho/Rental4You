@@ -8,8 +8,9 @@ namespace Rental4You.Data
     public enum Roles
     {
         Admin,
-        Formador,
-        Cliente
+        Funcionario,
+        Cliente,
+        Gestor
     }
     public static class Inicializacao
     {
@@ -18,8 +19,9 @@ namespace Rental4You.Data
         {
             //Adicionar default Roles
             await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Formador.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Funcionario.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Cliente.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Gestor.ToString()));
             //Adicionar Default User - Admin
             var defaultUser = new ApplicationUser
             {
