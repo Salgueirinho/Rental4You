@@ -23,7 +23,7 @@ namespace Rental4You.Models
 
         public bool Danos { get; set; }
         public int Kilometros { get; set; }
-        public int IdEmpresa { get; set; }
-        public Empresa? Empresa { get; set; }
+        public int EmpresaId { get; set; }
+        public Empresa Empresa { get; set; }
     }
 }

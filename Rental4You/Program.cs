@@ -5,8 +5,13 @@ using Rental4You.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string path = Directory.GetCurrentDirectory();
+
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection").Replace("[DataDirectory]", path);
+
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

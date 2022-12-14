@@ -8,10 +8,10 @@ namespace Rental4You.Models
         
         [PersonalData]
         public string Nome { get; set; }
-        public int IdEmrpesa { get; set; }
+        public int EmpresaId { get; set; }
         public Empresa Empresa { get; set; }
 
-        public int IdApplicationUser { get; set; }
-        public ApplicationUser? ApplicationUser { get; set; }
+        public int ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
