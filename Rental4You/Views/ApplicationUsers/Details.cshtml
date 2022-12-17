@@ -1,0 +1,26 @@
+﻿@model Rental4You.ViewModels.ApplicationUserViewModel
+@{
+    ViewData["Title"] = "Detalhes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalhes do utilizador</h1>
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h2>Editar estado do utilizador </h2>
+            <span class="badge bg-dark text-white">@Model.UserName</span>
+        </div>
+        <div class="card-body">
+            <div>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
+                </label>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="width:auto" />
+                <a asp-action="Index" class="btn btn-primary" style="width:auto">Cancelar</a>
+            </div>
+        </div>
+</form>

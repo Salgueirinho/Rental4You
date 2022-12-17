@@ -29,6 +29,7 @@ namespace Rental4You.Data
                 Email = "admin@localhost.com",
                 PrimeiroNome = "Administrador",
                 UltimoNome = "Local",
+                Ativo = true,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true
             };

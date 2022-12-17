@@ -7,20 +7,16 @@ namespace Rental4You.Models
     {
         [Key]
         public int Id { get; set; }
-
         public string Marca { get; set; }
         public string Modelo { get; set; }
-        public string Categoria { get; set; }
-
+        public int CategoriaId { get; set; }
+        public Categoria Categoria { get; set; }
         public int NumeroLugares { get; set; }
 
         //true é manual. false é automatico
         public bool Caixa { get; set; }
-
         public bool Disponivel { get; set; }
-
         public decimal Custo { get; set; }
-
         public bool Danos { get; set; }
         public int Kilometros { get; set; }
         public int EmpresaId { get; set; }

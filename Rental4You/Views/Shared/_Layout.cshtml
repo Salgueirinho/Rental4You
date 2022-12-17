@@ -41,11 +41,20 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Utilizadores</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="ApplicationUsers" asp-action="">Utilizadores</a>
+                            </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Empresas</a>
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="Categorias" asp-action="">Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="Empresas" asp-action="">Empresas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="ApplicationUsers" asp-action="">Utilizadores</a>
                             </li>
                         }
                     </ul>
