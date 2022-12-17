@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Rental4You.Data;
 using Rental4You.Models;
+using Rental4You.ViewModels;
 
 namespace Rental4You.Controllers
 {
@@ -24,9 +25,20 @@ namespace Rental4You.Controllers
         }
 
         // GET: Empresas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool? estado)
         {
-              return View(await _context.Empresas.ToListAsync());
+            if(estado == null)
+                return View(await _context.Empresas.ToListAsync());
+            return View(await _context.Empresas.Where(e => e.EstadoSubscricao == estado).ToListAsync());
+        }
+
+        //POST: Empresas
+        [HttpPost]
+        public async Task<IActionResult> Index(string TextoAPesquisar)
+        {
+            if (string.IsNullOrWhiteSpace(TextoAPesquisar))
+                return View(await _context.Empresas.ToListAsync());
+            return View(await _context.Empresas.Where(e => e.Nome.ToLower().Contains(TextoAPesquisar.ToLower())).ToListAsync());
         }
 
         // GET: Empresas/Details/5
