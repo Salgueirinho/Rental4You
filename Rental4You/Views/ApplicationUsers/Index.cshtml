@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<Rental4You.ViewModels.ApplicationUserViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -39,9 +42,17 @@
                 <td>
                     @string.Join(" , ", item.Roles.ToList())
                 </td>
-                <td align="center">
-                    <a class="btn-primary btn" asp-action="Details" asp-controller="ApplicationUsers" asp-route-userId="@item.UserId">Editar Utilizador</a>
-                </td>
+                @if (item.UserId != UserManager.GetUserId(User))
+                {
+                    <td align="center">
+                        <a class="btn-primary btn" asp-action="Details" asp-controller="ApplicationUsers" asp-route-userId="@item.UserId">Editar Utilizador</a>
+                    </td>
+                } else{
+                    <td align="center">
+                        
+                    </td>
+                }
+                
             </tr>
         }
 

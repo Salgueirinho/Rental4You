@@ -1,11 +1,18 @@
 ﻿@model Rental4You.ViewModels.ApplicationUserViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Detalhes do utilizador</h1>
-
+@if(Model.UserId == UserManager.GetUserId(User)){
+    <p class="alert alert-warning">
+            Não pode desativar a sua própia conta.
+    </p>
+    <a asp-action="Index" class="btn btn-primary" style="width:auto">Voltar para Lista de Utilizadores</a>
+} else{
 <form method="post">
     <div class="card">
         <div class="card-header">
@@ -24,3 +31,4 @@
             </div>
         </div>
 </form>
+}

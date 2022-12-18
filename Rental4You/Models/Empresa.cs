@@ -10,6 +10,7 @@ namespace Rental4You.Models
         [PersonalData]
         public string Nome { get; set; }
         public ICollection<Gestor> Gestores { get; set; }
+        [Display(Name = "Estado da Subscrição")]
         public bool EstadoSubscricao { get; set; }
         [Display(Name = "Avaliação")]
         [Range(0,10, ErrorMessage = "Valores entre 0 e 10")]
