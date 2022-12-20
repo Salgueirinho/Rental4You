@@ -15,9 +15,20 @@ namespace PWEB_AulasP_2223.Controllers
             this._userManager = userManager;
             this._roleManager = roleManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ApplicationUser user)
         {
-            var users = await _userManager.Users.ToListAsync();
+            
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var users = new List<ApplicationUser>();
+
+            if (isAdmin)
+            {
+                users = await _userManager.Users.ToListAsync();
+            } else
+            {
+                
+            }
+            
             var usersViewModel = new List<ApplicationUserViewModel>();
 
             foreach (var u in users)

@@ -74,7 +74,7 @@ namespace Rental4You.Controllers
         {
             int NumberOfGestores = _context.Gestores.Count() + 1;
             ApplicationUser user = new ApplicationUser();
-            user.UserName = "Gestor" + NumberOfGestores + "@" + empresa.Nome + ".com";
+            user.UserName = "Gestor" + NumberOfGestores + "@isec.com";
             var result = await _userManager.CreateAsync(user, "Is3C..00");
 
             if(result.Succeeded)
@@ -87,6 +87,7 @@ namespace Rental4You.Controllers
                     Gestor gestor = new Gestor();
                     gestor.Nome = user.UserName;
                     gestor.ApplicationUser = _user;
+                    gestor.ApplicationUser.EmailConfirmed = true;
                     _context.Add(empresa);
                     await _context.SaveChangesAsync();
                     gestor.EmpresaId = _context.Empresas.OrderBy(e => e.Id).Last().Id;
