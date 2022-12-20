@@ -18,14 +18,14 @@ namespace PWEB_AulasP_2223.Controllers
         public async Task<IActionResult> Index(ApplicationUser user)
         {
             
-            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             var users = new List<ApplicationUser>();
 
-            if (isAdmin)
+            if (User.IsInRole("Admin"))
             {
                 users = await _userManager.Users.ToListAsync();
             } else
-            {
+            {   
+
                 
             }
             

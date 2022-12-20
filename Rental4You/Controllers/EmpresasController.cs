@@ -83,10 +83,10 @@ namespace Rental4You.Controllers
                 ModelState.Remove(nameof(Empresa.Gestores));
                 if (ModelState.IsValid)
                 {
-                    ApplicationUser _user = _userManager.Users.OrderBy(u => u.Id).Last();
+                    
                     Gestor gestor = new Gestor();
                     gestor.Nome = user.UserName;
-                    gestor.ApplicationUser = _user;
+                    gestor.ApplicationUser = user;
                     gestor.ApplicationUser.EmailConfirmed = true;
                     _context.Add(empresa);
                     await _context.SaveChangesAsync();
@@ -183,15 +183,19 @@ namespace Rental4You.Controllers
             {
                 if(_context.Veiculos.Count(v => v.EmpresaId == empresa.Id) <= 0)
                 {
-                    var gestores = _context.Gestores.Include(g => g.ApplicationUser)
-                        .Where(g => g.EmpresaId == empresa.Id).ToList();
+                    var gestores = _context.Gestores.Include(g => g.ApplicationUser).Where(g => g.EmpresaId == empresa.Id).ToList();
+
                     foreach(var gestor in gestores)
                     {
                         var user = _userManager.Users.Where(u => u.Id == gestor.ApplicationUser.Id).FirstOrDefault();
-                        if(user != null)
-                            await _userManager.DeleteAsync(user);
+                        if (user != null)
+                        {
+                            _context.Gestores.RemoveRange(_context.Gestores.Where(g => g.Id == gestor.Id));
+                            _context.Users.Remove(user);
+                        }
+                       
                     }
-                    _context.Gestores.RemoveRange(gestores);
+    
                     _context.Empresas.Remove(empresa);
                 } else
                 {
