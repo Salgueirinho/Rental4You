@@ -1,0 +1,36 @@
+﻿@model Rental4You.ViewModels.ApplicationUserViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Editar Funcionário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Editar estado do funcionário</h1>
+@if (Model.UserId == UserManager.GetUserId(User))
+{
+    <p class="alert alert-warning">
+        Não pode desativar a sua própia conta.
+    </p>
+    <a asp-action="Index" class="btn btn-primary" style="width:auto">Voltar para Lista de Utilizadores</a>
+}
+else
+{
+    <form method="post">
+        <div class="card">
+            <div class="card-header">
+                <span class="badge bg-dark text-white">@Model.UserName</span>
+            </div>
+            <div class="card-body">
+                <div>
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Guardar" class="btn btn-primary" style="width:auto" />
+                    <a asp-action="Index" class="btn btn-primary" style="width:auto">Cancelar</a>
+                </div>
+            </div>
+    </form>
+}

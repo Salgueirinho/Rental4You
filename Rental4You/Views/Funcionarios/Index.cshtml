@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Rental4You.Models.Funcionario>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Funcioários";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Funcioários</h1>
+
+<p>
+    <a class="btn-primary btn" asp-action="Create">Adicionar Funcionário</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
+            </th>
+            <th>
+                Ativo
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Nome)
+            </td>
+            <td>
+                <input type="checkbox" checked="@item.ApplicationUser.Ativo" onclick="return false;"/>
+            </td>
+            @if(item.ApplicationUser.Id != UserManager.GetUserId(User)){
+            <td>
+                        <a class="btn-primary btn" asp-action="Edit" asp-route-userId="@item.Id">Editar Estado</a>
+            </td>
+            }
+        </tr>
+}
+    </tbody>
+</table>

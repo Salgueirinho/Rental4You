@@ -88,6 +88,7 @@ namespace Rental4You.Controllers
                     gestor.Nome = user.UserName;
                     gestor.ApplicationUser = user;
                     gestor.ApplicationUser.EmailConfirmed = true;
+                    gestor.ApplicationUser.Ativo = true;
                     _context.Add(empresa);
                     await _context.SaveChangesAsync();
                     gestor.EmpresaId = _context.Empresas.OrderBy(e => e.Id).Last().Id;

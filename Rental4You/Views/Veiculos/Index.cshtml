@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Rental4You.Models.Veiculo>
+
+@{
+    ViewData["Title"] = "Veículos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Veículos</h1>
+
+<p>
+    <a asp-action="Create">Adicionar Veículo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Marca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroLugares)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Caixa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponivel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Custo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Danos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kilometros)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Marca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modelo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroLugares)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Caixa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disponivel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Custo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Danos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kilometros)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -17,17 +17,7 @@ namespace PWEB_AulasP_2223.Controllers
         }
         public async Task<IActionResult> Index(ApplicationUser user)
         {
-            
-            var users = new List<ApplicationUser>();
-
-            if (User.IsInRole("Admin"))
-            {
-                users = await _userManager.Users.ToListAsync();
-            } else
-            {   
-
-                
-            }
+            var users = await _userManager.Users.ToListAsync();
             
             var usersViewModel = new List<ApplicationUserViewModel>();
 
@@ -37,8 +27,8 @@ namespace PWEB_AulasP_2223.Controllers
                 userModel.UserId = u.Id;
                 userModel.UserName = u.UserName;
                 userModel.Roles = await GetUserRoles(u);
-                userModel.PrimeiroNome = u.PrimeiroNome;
-                userModel.UltimoNome = u.UltimoNome;
+                userModel.PrimeiroNome = u.PrimeiroNome?? "";
+                userModel.UltimoNome = u.UltimoNome?? "";
                 userModel.Ativo = u.Ativo;
                 usersViewModel.Add(userModel);
             }
@@ -61,8 +51,8 @@ namespace PWEB_AulasP_2223.Controllers
             userModel.UserId = user.Id;
             userModel.UserName = user.UserName;
             userModel.Roles = await GetUserRoles(user);
-            userModel.PrimeiroNome = user.PrimeiroNome;
-            userModel.UltimoNome = user.UltimoNome;
+            userModel.PrimeiroNome = user.PrimeiroNome?? "";
+            userModel.UltimoNome = user.UltimoNome?? "";
             userModel.Ativo = user.Ativo;
 
             return View(userModel);

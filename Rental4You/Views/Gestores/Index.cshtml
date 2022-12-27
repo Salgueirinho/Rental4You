@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Rental4You.Models.Gestor>
+
+@{
+    ViewData["Title"] = "Gestores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Gestores</h1>
+
+<p>
+    <a asp-action="Create">Adicionar Gestor</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
+            </th>
+            <th>
+                Ativo
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Nome)
+            </td>
+            <td>
+                <input type="checkbox" checked="@item.ApplicationUser.Ativo" onclick="return false;" />
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
