@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="wwwroot\DanosImagens\" />
   </ItemGroup>
 
 </Project>

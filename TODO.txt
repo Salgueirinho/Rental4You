@@ -4,8 +4,8 @@ TODO
 //		data de entrega).
 //	○ O resultado da pesquisa deve ser uma lista dos veículos disponíveis, indicando o
 //		custo e a empresa de aluguer a que pertence, bem como a avaliação da empresa.
-	○ Deve ser possível filtrar os resultados por categoria de veículo e por empresa.
-	○ Deve ser possível ordenar os resultados por preço mais baixo/alto e/ou por
+/-	○ Deve ser possível filtrar os resultados por categoria de veículo e por empresa.
+//	○ Deve ser possível ordenar os resultados por preço mais baixo/alto e/ou por
 		classificação da empresa.
 //	○ Efectuar o registo como Cliente.
 
@@ -18,7 +18,7 @@ TODO
 
 ● Área de funcionário de uma empresa de aluguer (Funcionário):
 //	○ Gerir a frota de veículos da empresa:
-//		■ Listar registo de veículos - com filtros (categoria, estado) e com ordenação.
+/-		■ Listar registo de veículos - com filtros (categoria, estado) e com ordenação.
 //		■ Adicionar registo de veículos;
 //		■ Editar registo de veículos;
 //		■ Apagar registo de veículos (apenas se já não existirem reservas desse
@@ -38,9 +38,9 @@ TODO
 //			■ Receber um veículo do cliente (entrega do veículo pelo cliente)
 //	● Assinalar o estado em que o veículo é entregue pelo cliente
 //		○ N.º de Quilómetros do veículo
-		○ Danos no veículo (S/N)
-		○ Caso seja assinalado sim, devem ser anexadas fotografias
-			que comprovem os danos.
+//		○ Danos no veículo (S/N)
+//		○ Caso seja assinalado sim, devem ser anexadas fotografias
+//			que comprovem os danos.
 //		○ Funcionário que recebeu o veículo.
 //		○ Observações.
 
@@ -66,7 +66,7 @@ TODO
 
 ● Área de administrador da plataforma (Administrador)
 //	○ Gestão de empresas
-//		■ Listar registo de empresas - com filtros (nome, estado da subscrição) e com
+/-		■ Listar registo de empresas - com filtros (nome, estado da subscrição) e com
 //			ordenação.
 //		■ Adicionar registo de empresas - automaticamente cria um utilizador com perfil
 //			gestor, associado à empresa.
@@ -77,9 +77,14 @@ TODO
 //		■ Listar, criar, editar, apagar registos
 //	○ Gestão de utilizadores
 //		■ Listar, editar, ativar, inativar registos
-	○ De acordo com o atrás já referido para os Dashboard para os Gestores
-		■ Dashboard com informação sobre a performance das reservas
-			● Gráficos
-				○ N.º de reservas diárias últimos 30 dias
-				○ N.º de reservas mensais (últimos 12 meses).
-				○ N.º de clientes novos por mês (últimos 12 meses).
+//	○ De acordo com o atrás já referido para os Dashboard para os Gestores
+//		■ Dashboard com informação sobre a performance das reservas
+//			● Gráficos
+//				○ N.º de reservas diárias últimos 30 dias
+//				○ N.º de reservas mensais (últimos 12 meses).
+//				○ N.º de clientes novos por mês (últimos 12 meses).
+
+
+MELHORAR INTERFACE ETC
+Warnings
+Pagina 404

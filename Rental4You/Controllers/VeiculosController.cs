@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -85,7 +87,8 @@ namespace Rental4You.Controllers
             return true;
         }
 
-        public async Task<IActionResult> Search(string? Localizacao, int? CategoriaId, DateTime? DataLevantamento, DateTime? DataEntrega)
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Search(string? Localizacao, int? CategoriaId, DateTime? DataLevantamento, DateTime? DataEntrega, string? sortBy)
         {
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
             var pesquisaVM = new PesquisaVeiculosViewModel();
@@ -105,19 +108,35 @@ namespace Rental4You.Controllers
                         pesquisaVM.ListaVeiculos.Add(veiculo);
                 }
             }
-
+            if (!string.IsNullOrEmpty(sortBy)) {
+                var newList = pesquisaVM.ListaVeiculos;
+                switch (sortBy)
+                {
+                    case "Pmais":
+                        newList = pesquisaVM.ListaVeiculos.OrderByDescending(v => v.Custo).ToList();
+                        break;
+                    case "Pmenos":
+                        newList = pesquisaVM.ListaVeiculos.OrderBy(v => v.Custo).ToList();
+                        break;
+                    case "Rmais":
+                        newList = pesquisaVM.ListaVeiculos.OrderByDescending(v => v.Empresa.Avalicao).ToList();
+                        break;
+                    case "Rmenos":
+                        newList = pesquisaVM.ListaVeiculos.OrderBy(v => v.Empresa.Avalicao).ToList();
+                        break;
+                }
+                pesquisaVM.ListaVeiculos = newList;
+            }
             pesquisaVM.NumResultados = pesquisaVM.ListaVeiculos.Count();
-
-
             return View(pesquisaVM);
-
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> Search(
             [Bind("Localizacao,CategoriaId,DataLevantamento,DataEntrega")]
-            PesquisaVeiculosViewModel pesquisaVeiculo
+            PesquisaVeiculosViewModel pesquisaVeiculo, string? sortBy
             )
         {
             ModelState.Remove(nameof(PesquisaVeiculosViewModel.ListaVeiculos));
@@ -137,6 +156,26 @@ namespace Rental4You.Controllers
                 {
                     if(VeiculoDisponivel(pesquisaVeiculo.DataEntrega, pesquisaVeiculo.DataLevantamento, veiculo.Id) == true)
                         pesquisaVeiculo.ListaVeiculos.Add(veiculo);
+                }
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    var newList = pesquisaVeiculo.ListaVeiculos;
+                    switch (sortBy)
+                    {
+                        case "Pmais":
+                            newList = pesquisaVeiculo.ListaVeiculos.OrderByDescending(v => v.Custo).ToList();
+                            break;
+                        case "Pmenos":
+                            newList = pesquisaVeiculo.ListaVeiculos.OrderBy(v => v.Custo).ToList();
+                            break;
+                        case "Rmais":
+                            newList = pesquisaVeiculo.ListaVeiculos.OrderByDescending(v => v.Empresa.Avalicao).ToList();
+                            break;
+                        case "Rmenos":
+                            newList = pesquisaVeiculo.ListaVeiculos.OrderBy(v => v.Empresa.Avalicao).ToList();
+                            break;
+                    }
+                    pesquisaVeiculo.ListaVeiculos = newList;
                 }
             }
             pesquisaVeiculo.NumResultados = pesquisaVeiculo.ListaVeiculos.Count();
