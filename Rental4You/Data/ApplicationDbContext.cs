@@ -11,10 +11,12 @@ namespace Rental4You.Data
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        public DbSet<Rental4You.Models.Categoria> Categoria { get; set; }
     }
 }

@@ -1,0 +1,89 @@
+﻿@model Rental4You.ViewModels.PesquisaVeiculosViewModel
+
+@{
+    ViewData["Title"] = "Veículos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Veículos</h1>
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label asp-for="Localizacao" class="control-label"></label>
+        <input asp-for="Localizacao" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoriaId" class="control-label"></label>
+        <select asp-for="CategoriaId" class ="form-select" asp-items="ViewBag.CategoriaId"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DataLevantamento" class="control-label"></label>
+        <input asp-for="DataLevantamento" class="form-control" />
+        <span asp-validation-for="DataLevantamento" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DataEntrega" class="control-label"></label>
+        <input asp-for="DataEntrega" class="form-control" />
+        <span asp-validation-for="DataEntrega" class="text-danger"></span>
+    </div>
+
+    <input type="submit" value="Pesquisar" />
+</form>
+
+
+@if (Model.NumResultados == 0)
+{
+    <p class="alert alert-warning">
+        Não foi possível
+        encontrar veiculos com os dados introduzidos.
+        Por favor, reveja a sua pesquisa
+    </p>
+}
+else
+{
+    <p>Existe(m) @Model.NumResultados Veiculos(s) disponiveis</p>
+}
+
+
+
+<div class="col row-cols-1 row-cols-md-2 mb-3 text-center align-middle" >
+
+    @foreach(var item in Model.ListaVeiculos) 
+   {
+        <div class="card justify-content-center text-center">
+            <div class="img-square-wrapper">
+                <img class="card-img" src="@String.Format("https://cdn.imagin.studio/getImage?customer=copyright-imaginstudio&make={0}&modelFamily={1}&paintId=pspc0003&angle=20&width=2600&zoomType=fullscreen", @item.Marca, item.Modelo)" />
+            </div>
+            <div class="card-body">
+                <div class="card-header">
+                    @item.Marca <small>@item.Modelo</small>
+                </div>
+                <div class="">
+                    @item.Categoria.Nome
+                </div>
+                <div class="">
+                    @item.NumeroLugares lugares
+                </div>
+                @if(item.Caixa) 
+                {
+                    <div>Manual</div>
+                } else {
+                    <div>Automático</div>
+                }
+                <div>
+                    @item.Custo €/dia
+                </div>
+                <div>
+                    @item.Empresa.Nome
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Reservas" asp-action="Create" asp-route-id="@item.Id"
+               asp-route-data_levantamento="@Model.DataLevantamento.ToString()" asp-route-data_entrega="@Model.DataEntrega.ToString()"
+                    class="w-100 btn btn-lg btn-outline-primary">Reservar</a>
+            </div>
+        </div>
+
+   }
+
+</div>

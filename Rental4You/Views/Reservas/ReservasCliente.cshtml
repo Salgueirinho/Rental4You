@@ -1,0 +1,139 @@
+﻿@model IEnumerable<Rental4You.Models.Reserva>
+
+@{
+    ViewData["Title"] = "Minhas Reservas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>As Minhas Reservas</h1>
+
+<div class="d-flex justify-content-center">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Veiculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Veiculo.Modelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KilometrosInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KilometrosFim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FuncionarioEntrega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FuncionarioRecebe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObservacoesInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObservacoesFim)
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Veiculo.Id)
+                </td>
+                <td>
+                    @item.Veiculo.Marca <small>@item.Veiculo.Modelo</small>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KilometrosInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KilometrosFim)
+                </td>
+                <td>
+                    @if (item.Estado == true)
+                    {
+                        <span class="badge bg-dark text-white">Confirmado</span>
+                    }
+                    else
+                    {
+                        if (item.Confirmado == true)
+                        {
+                            <span class="badge bg-dark text-white">Rejeitado</span>
+                        }
+                        else
+                        {
+                            <div>Por confirmar</div>
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataFim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.ApplicationUser.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FuncionarioEntrega.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FuncionarioRecebe.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObservacoesInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObservacoesFim)
+                </td>
+                <td>
+                    @if (item.Confirmado == false)
+                    {
+                        <span class="badge bg-dark text-white">
+                            Aguarda confirmação</span>
+                    }
+                    else
+                    {
+                        if (item.Estado == true)
+                        {
+                            if (item.FuncionarioEntregaId == null)
+                            {
+                                <span class="badge bg-dark text-white">Veículo pronto</span>
+                            }
+                            else if (item.FuncionarioRecebeId == null)
+                            {
+                                <span class="badge bg-dark text-white">Veículo em uso</span>
+                            }
+                            else
+                            {
+                                <div>Reserva concluída. Veículo entregue</div>
+                            }
+                        }
+                    }
+                    <a class="btn-primary btn" asp-action="Details" asp-route-id=@item.Id>Detalhes</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

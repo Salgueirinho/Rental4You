@@ -82,12 +82,8 @@
                 @Html.DisplayFor(modelItem => item.Empresa.Id)
             </td>
             <td>
-                @if (User.IsInRole("Cliente")) {
-                    <a class="btn-primary btn" asp-action="" asp-route-id="@item.Id">Reservar</a>
-                } else {
-                    <a class="btn-primary btn" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn-primary btn" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                }
+                <a class="btn-primary btn" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a class="btn-primary btn" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

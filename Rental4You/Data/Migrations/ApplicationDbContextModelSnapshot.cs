@@ -257,7 +257,25 @@ namespace Rental4You.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categoria");
+                    b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("Rental4You.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("Rental4You.Models.Empresa", b =>
@@ -337,6 +355,63 @@ namespace Rental4You.Data.Migrations
                     b.ToTable("Gestores");
                 });
 
+            modelBuilder.Entity("Rental4You.Models.Reserva", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Confirmado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataFim")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("FuncionarioEntregaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FuncionarioRecebeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KilometrosFim")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KilometrosInicio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ObservacoesFim")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ObservacoesInicio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VeiculoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("FuncionarioEntregaId");
+
+                    b.HasIndex("FuncionarioRecebeId");
+
+                    b.HasIndex("VeiculoId");
+
+                    b.ToTable("Reservas");
+                });
+
             modelBuilder.Entity("Rental4You.Models.Veiculo", b =>
                 {
                     b.Property<int>("Id")
@@ -365,6 +440,10 @@ namespace Rental4You.Data.Migrations
 
                     b.Property<int>("Kilometros")
                         .HasColumnType("int");
+
+                    b.Property<string>("Localizacao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Marca")
                         .IsRequired()
@@ -437,6 +516,15 @@ namespace Rental4You.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Rental4You.Models.Cliente", b =>
+                {
+                    b.HasOne("Rental4You.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Rental4You.Models.Funcionario", b =>
                 {
                     b.HasOne("Rental4You.Models.ApplicationUser", "ApplicationUser")
@@ -471,6 +559,37 @@ namespace Rental4You.Data.Migrations
                     b.Navigation("Empresa");
                 });
 
+            modelBuilder.Entity("Rental4You.Models.Reserva", b =>
+                {
+                    b.HasOne("Rental4You.Models.Cliente", "Cliente")
+                        .WithMany("Reservas")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rental4You.Models.Funcionario", "FuncionarioEntrega")
+                        .WithMany()
+                        .HasForeignKey("FuncionarioEntregaId");
+
+                    b.HasOne("Rental4You.Models.Funcionario", "FuncionarioRecebe")
+                        .WithMany()
+                        .HasForeignKey("FuncionarioRecebeId");
+
+                    b.HasOne("Rental4You.Models.Veiculo", "Veiculo")
+                        .WithMany()
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("FuncionarioEntrega");
+
+                    b.Navigation("FuncionarioRecebe");
+
+                    b.Navigation("Veiculo");
+                });
+
             modelBuilder.Entity("Rental4You.Models.Veiculo", b =>
                 {
                     b.HasOne("Rental4You.Models.Categoria", "Categoria")
@@ -488,6 +607,11 @@ namespace Rental4You.Data.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Empresa");
+                });
+
+            modelBuilder.Entity("Rental4You.Models.Cliente", b =>
+                {
+                    b.Navigation("Reservas");
                 });
 
             modelBuilder.Entity("Rental4You.Models.Empresa", b =>

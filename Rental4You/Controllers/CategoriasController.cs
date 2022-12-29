@@ -22,18 +22,18 @@ namespace Rental4You.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Categoria.ToListAsync());
+              return View(await _context.Categorias.ToListAsync());
         }
 
         // GET: Categorias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Categoria == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
 
-            var categoria = await _context.Categoria
+            var categoria = await _context.Categorias
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (categoria == null)
             {
@@ -68,12 +68,12 @@ namespace Rental4You.Controllers
         // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categoria == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
 
-            var categoria = await _context.Categoria.FindAsync(id);
+            var categoria = await _context.Categorias.FindAsync(id);
             if (categoria == null)
             {
                 return NotFound();
@@ -119,12 +119,11 @@ namespace Rental4You.Controllers
         // GET: Categorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categoria == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
-
-            var categoria = await _context.Categoria
+            var categoria = await _context.Categorias
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (categoria == null)
             {
@@ -139,14 +138,14 @@ namespace Rental4You.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Categoria == null)
+            if (_context.Categorias == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Categoria'  is null.");
             }
-            var categoria = await _context.Categoria.FindAsync(id);
+            var categoria = await _context.Categorias.FindAsync(id);
             if (categoria != null)
             {
-                _context.Categoria.Remove(categoria);
+                _context.Categorias.Remove(categoria);
             }
             
             await _context.SaveChangesAsync();
@@ -155,7 +154,7 @@ namespace Rental4You.Controllers
 
         private bool CategoriaExists(int id)
         {
-          return _context.Categoria.Any(e => e.Id == id);
+          return _context.Categorias.Any(e => e.Id == id);
         }
     }
 }

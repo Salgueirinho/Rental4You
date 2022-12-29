@@ -28,7 +28,7 @@
                         </li>
                         @if(User.IsInRole("Cliente")) {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Reservas</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Reservas" asp-action="ReservasCliente">Reservas</a>
                             </li>
                         }
                         @if (User.IsInRole("Funcionario")) { 
@@ -36,7 +36,7 @@
                                 <a class="nav-link text-white" asp-area="Index" asp-controller="Veiculos" asp-action="">Veículos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Reservas</a>
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="Reservas" asp-action="">Reservas</a>
                             </li>
                         }
                         @if (User.IsInRole("Gestor"))
@@ -45,7 +45,7 @@
                                 <a class="nav-link text-white" asp-area="Index" asp-controller="Veiculos" asp-action="">Veículos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Reservas</a>
+                                <a class="nav-link text-white" asp-area="Index" asp-controller="Reservas" asp-action="">Reservas</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Index" asp-controller="Funcionarios" asp-action="">Funcionários</a>
@@ -74,7 +74,6 @@
                 </div>
             </div>
         </nav>
-        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">

@@ -1,0 +1,88 @@
+﻿@model Rental4You.Models.Reserva
+
+@{
+    ViewData["Title"] = "Reservar Veiculo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Reservar Veiculo</h1>
+
+<p>
+    Cliente: <span>@Model.Cliente.ApplicationUser.PrimeiroNome </span> 
+</p>
+
+<p>
+    O preço total da reserva é: @ViewBag.PrecoReserva €.
+</p>
+
+<h4>Reserva</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Confirmar" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="VeiculoId" class="control-label"></label>
+                <input asp-for="VeiculoId" class ="form-control" value="@Model.VeiculoId" readonly/>
+            </div>
+            <div class="form-group">
+                <label asp-for="KilometrosInicio" class="control-label"></label>
+                <input asp-for="KilometrosInicio" class="form-control" value="@Model.KilometrosInicio" readonly/>
+                <span asp-validation-for="KilometrosInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KilometrosFim" class="control-label" hidden></label>
+                <input asp-for="KilometrosFim" class="form-control" readonly hidden/>
+                <span asp-validation-for="KilometrosFim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label" hidden></label>
+                <input asp-for="Estado" class="form-control" readonly hidden/>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataInicio" class="control-label"></label>
+                <input asp-for="DataInicio" class="form-control" readonly value="@Model.DataInicio.ToString("yyyy-MM-dd")"/>
+                <span asp-validation-for="DataInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataFim" class="control-label"></label>
+                <input asp-for="DataFim" class="form-control" readonly  value="@Model.DataFim.ToString("yyyy-MM-dd")"/>
+                <span asp-validation-for="DataFim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteId" class="control-label" hidden></label>
+                <input asp-for="ClienteId" class ="form-control" readonly hidden value="@Model.ClienteId"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="FuncionarioEntregaId" class="control-label" hidden></label>
+                <input asp-for="FuncionarioEntregaId" class ="form-control" readonly hidden/>
+            </div>
+            <div class="form-group">
+                <label asp-for="FuncionarioRecebeId" class="control-label"hidden></label>
+                <input asp-for="FuncionarioRecebeId" class ="form-control" readonly hidden/>
+            </div>
+            <div class="form-group">
+                <label asp-for="ObservacoesInicio" class="control-label" hidden></label>
+                <input asp-for="ObservacoesInicio" class="form-control" readonly hidden/>
+                <span asp-validation-for="ObservacoesInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ObservacoesFim" class="control-label" hidden></label>
+                <input asp-for="ObservacoesFim" class="form-control" readonly hidden/>
+                <span asp-validation-for="ObservacoesFim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -6,10 +6,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Rental4You.Data;
 using Rental4You.Models;
+using Rental4You.ViewModels;
 
 namespace Rental4You.Controllers
 {
@@ -56,6 +58,96 @@ namespace Rental4You.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+      
+        public bool VeiculoDisponivel(DateTime dataEntrega, DateTime dataLevantamento, int id)
+        {
+
+            var reservas = _context.Reservas.Where(v => v.VeiculoId == id).ToList();
+
+            foreach (var reserva in reservas)
+            {
+                if ((dataLevantamento >= reserva.DataInicio && dataLevantamento < reserva.DataFim) ||
+                    (dataEntrega > reserva.DataInicio && dataEntrega <= reserva.DataFim))
+                {
+                    if(reserva.Estado == false && reserva.Confirmado == false)
+                    {
+                        return false;
+                    }
+                }
+                if(dataLevantamento < reserva.DataInicio && dataEntrega > reserva.DataFim)
+                {
+                    if (reserva.Estado == false && reserva.Confirmado == false)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public async Task<IActionResult> Search(string? Localizacao, int? CategoriaId, DateTime? DataLevantamento, DateTime? DataEntrega)
+        {
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
+            var pesquisaVM = new PesquisaVeiculosViewModel();
+
+            if (string.IsNullOrWhiteSpace(Localizacao) || CategoriaId==null || DataEntrega == null || DataLevantamento == null ||
+                CategoriaId == null)
+                pesquisaVM.ListaVeiculos = new List<Veiculo>() ;
+            else
+            {
+                var lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                    Where(c => c.Localizacao.Contains(Localizacao) && c.CategoriaId == CategoriaId && c.Disponivel == true
+                         ).ToListAsync();
+                pesquisaVM.ListaVeiculos = new List<Veiculo>();
+                foreach (var veiculo in lista)
+                {
+                    if (VeiculoDisponivel(pesquisaVM.DataEntrega, pesquisaVM.DataLevantamento, veiculo.Id) == true)
+                        pesquisaVM.ListaVeiculos.Add(veiculo);
+                }
+            }
+
+            pesquisaVM.NumResultados = pesquisaVM.ListaVeiculos.Count();
+
+
+            return View(pesquisaVM);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(
+            [Bind("Localizacao,CategoriaId,DataLevantamento,DataEntrega")]
+            PesquisaVeiculosViewModel pesquisaVeiculo
+            )
+        {
+            ModelState.Remove(nameof(PesquisaVeiculosViewModel.ListaVeiculos));
+            ModelState.Remove(nameof(PesquisaVeiculosViewModel.NumResultados));
+            if (string.IsNullOrEmpty(pesquisaVeiculo.Localizacao) || !ModelState.IsValid)
+            {
+                pesquisaVeiculo.ListaVeiculos = new List<Veiculo>();
+            }
+            else
+            {
+                var lista =
+                    await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
+                    .Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId && c.Disponivel == true 
+                         ).ToListAsync();
+                pesquisaVeiculo.ListaVeiculos = new List<Veiculo>();
+                foreach(var veiculo in lista)
+                {
+                    if(VeiculoDisponivel(pesquisaVeiculo.DataEntrega, pesquisaVeiculo.DataLevantamento, veiculo.Id) == true)
+                        pesquisaVeiculo.ListaVeiculos.Add(veiculo);
+                }
+            }
+            pesquisaVeiculo.NumResultados = pesquisaVeiculo.ListaVeiculos.Count();
+
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
+            return View(pesquisaVeiculo);
+
+
+        }
+
+
 
         // GET: Veiculos/Create
         public IActionResult Create()
@@ -76,7 +168,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Marca,Modelo,CategoriaId,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
+        public async Task<IActionResult> Create([Bind("Id,Marca,Modelo,CategoriaId,Localizacao,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
         {
             ModelState.Remove(nameof(Veiculo.Empresa));
             ModelState.Remove(nameof(Veiculo.Categoria));
@@ -127,7 +219,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo,CategoriaId,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo,CategoriaId,Localizacao,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
         {
             if (id != veiculo.Id)
             {
@@ -197,6 +289,23 @@ namespace Rental4You.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Veiculos'  is null.");
             }
             var veiculo = await _context.Veiculos.FindAsync(id);
+            var reservas = _context.Reservas.Where(r => r.VeiculoId == id).ToList();
+            foreach(var reserva in reservas)
+            {
+                if(reserva.VeiculoId == id)
+                {
+                    if (reserva.Confirmado == false)
+                    {
+                        ViewData["AlertMessage"] = "Veículo encontra-se reservado";
+                        return View(veiculo);
+                    }
+                    else if(reserva.FuncionarioRecebeId == null)
+                    {
+                        ViewData["AlertMessage"] = "Veículo encontra-se reservado";
+                        return View(veiculo);
+                    }
+                }
+            }
             if (veiculo != null)
             {
                 _context.Veiculos.Remove(veiculo);

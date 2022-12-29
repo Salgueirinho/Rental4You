@@ -11,8 +11,12 @@ namespace Rental4You.Models
         public int? KilometrosInicio { get; set; }
         public int? KilometrosFim { get; set; }
         public bool? Estado { get; set; }
-
+        public bool? Confirmado { get; set; }
+        [Display(Name = "Data de Inicio", Prompt = "dd-mm-yyyy")]
+        [DataType(DataType.Date)]
         public DateTime DataInicio { get; set; }
+        [Display(Name = "Data de Fim", Prompt = "dd-mm-yyyy")]
+        [DataType(DataType.Date)]
         public DateTime DataFim { get; set; }
 
         public int ClienteId { get; set; }
