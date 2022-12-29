@@ -130,6 +130,18 @@ namespace Rental4You.Controllers
             var cliente = _context.Clientes.Include(c => c.ApplicationUser).Where(c => c.ApplicationUser.Id == userId).FirstOrDefault();
             if (cliente == null || cliente.Id != reserva.ClienteId)
                 return NotFound();
+
+            if (Directory.Exists("wwwroot\\DanosImagens\\" + id))
+            {
+                string[] filenamesList = Directory.GetFiles("wwwroot\\DanosImagens\\" + id);
+                List<string> filenames = new List<string>();
+                foreach (string filename in filenamesList)
+                {
+                    filenames.Add(filename.Replace("wwwroot", ""));
+                }
+                ViewBag.images = filenames;
+            }
+
             return View(reserva);
         }
 
@@ -188,6 +200,7 @@ namespace Rental4You.Controllers
         {
             reserva.Confirmado = false;
             reserva.Estado = false;
+            reserva.DataConfirmada = DateTime.Now;
             if (VeiculoDisponivel(reserva.DataFim, reserva.DataInicio, reserva.VeiculoId) == false)
             {
                 ModelState.AddModelError("Veículo Indisponivel", "Parece que o veículo já se encontra alugado :(");
@@ -282,7 +295,8 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva,
+            [FromForm] List<IFormFile> DanoImagem)
         {
             if (id != reserva.Id)
             {
@@ -303,6 +317,34 @@ namespace Rental4You.Controllers
                     _context.Update(veiculo);
                     _context.Update(reserva);
                     await _context.SaveChangesAsync();
+
+                    string path = Directory.GetCurrentDirectory();
+                    Path.Combine(path, "wwwroot\\DanosImagens");
+
+                    if (!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+
+                    string reservaPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\DanosImagens\\" + id.ToString());
+
+                    if (!Directory.Exists(reservaPath))
+                        Directory.CreateDirectory(reservaPath);
+
+                    foreach (var formFile in DanoImagem)
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            var filePath = Path.Combine(reservaPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+
+                            while (System.IO.File.Exists(filePath))
+                            {
+                                filePath = Path.Combine(reservaPath, Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName));
+                            }
+                            using (var stream = System.IO.File.Create(filePath))
+                            {
+                                await formFile.CopyToAsync(stream);
+                            }
+                        }
+                    }
 
                 }
                 catch (DbUpdateConcurrencyException)

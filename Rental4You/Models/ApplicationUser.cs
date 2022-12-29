@@ -18,5 +18,6 @@ namespace Rental4You.Models
         public int NIF { get; set; }
         public bool Ativo { get; set; }
 
+        public DateTime DataRegisto { get; set; }
     }
 }

@@ -86,6 +86,20 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ObservacoesFim)
         </dd>
+        <dd class="col-sm-10">
+            @if(ViewBag.images == null){
+                <p class="alert alert-sucess">
+                    Não houve danos no carro nesta reserva.
+                </p>
+            } else {
+                <p class="alert alert-danger">
+                    O carro sofreu danos nesta reserva.
+                </p>
+                foreach(var item in ViewBag.images){
+                    <img src="@item" width="300" height="300"/>
+                }
+            }
+        </dd>
     </dl>
 </div>
 <div>

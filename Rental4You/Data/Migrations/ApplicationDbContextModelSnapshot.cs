@@ -174,6 +174,9 @@ namespace Rental4You.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DataRegisto")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -368,6 +371,9 @@ namespace Rental4You.Data.Migrations
 
                     b.Property<bool?>("Confirmado")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataConfirmada")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");

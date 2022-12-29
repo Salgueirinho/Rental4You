@@ -28,6 +28,8 @@ namespace Rental4You.Models
         public Funcionario? FuncionarioRecebe { get; set; }
         public string? ObservacoesInicio { get; set; }
         public string? ObservacoesFim { get; set; }
-      
+
+        [DataType(DataType.Date)]
+        public DateTime DataConfirmada { get; set; }
     }
 }

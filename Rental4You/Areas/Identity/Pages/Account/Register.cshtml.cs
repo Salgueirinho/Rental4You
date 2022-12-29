@@ -119,6 +119,8 @@ namespace Rental4You.Areas.Identity.Pages.Account
             [Display(Name = "NIF")]
             [Range(100000000,999999999, ErrorMessage = "Mínimo 9 dígitos")]
             public int NIF { get; set; }
+
+            public DateTime DataRegisto { get; set; }
         }
 
         
@@ -143,6 +145,7 @@ namespace Rental4You.Areas.Identity.Pages.Account
                 user.UltimoNome = Input.UltimoNome;
                 user.Idade = Input.Idade;
                 user.NIF = Input.NIF;
+                user.DataRegisto = DateTime.Now;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
