@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using Rental4You.Data;
 using Rental4You.Models;
 using Rental4You.ViewModels;
@@ -35,7 +36,7 @@ namespace Rental4You.Controllers
             if (gestor == null)
                 return (NotFound());
 
-            var applicationDbContext = _context.Funcionarios.Include(f => f.Empresa).Include(f=>f.ApplicationUser);
+            var applicationDbContext = _context.Funcionarios.Include(f => f.Empresa).Include(f=>f.ApplicationUser).Where(f => _userManager.GetUsersInRoleAsync("Funcionario").Result.Contains(f.ApplicationUser));
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -69,10 +70,11 @@ namespace Rental4You.Controllers
             var empresa = _context.Empresas.Where(e => e.Id == gestorTemp.EmpresaId).FirstOrDefault();
             if (empresa == null)
                 return NotFound();
+            var name = funcionario.Nome.Replace(" ", "");
             ApplicationUser user = new ApplicationUser();
             user.EmailConfirmed = true;
             user.Ativo = true;
-            user.UserName = funcionario.Nome.Trim() + "@isec.com";
+            user.UserName = name + "@" + empresa.Nome + ".com";
             var result = await _userManager.CreateAsync(user, "Is3C..00");
             if (result.Succeeded)
             {
@@ -103,6 +105,10 @@ namespace Rental4You.Controllers
             if (user == null)
             {
                 return NotFound();
+            }
+            if(!_userManager.GetUsersInRoleAsync("Funcionario").Result.Contains(user))
+            {
+                return RedirectToAction(nameof(Index));
             }
             var userModel = new ApplicationUserViewModel();
             userModel.UserId = user.Id;

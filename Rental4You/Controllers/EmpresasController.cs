@@ -86,9 +86,9 @@ namespace Rental4You.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Nome,EstadoSubscricao,Avalicao")] Empresa empresa)
         {
-            int NumberOfGestores = _context.Gestores.Count() + 1;
+            int NumberOfUsers = _userManager.Users.Count() + 1;
             ApplicationUser user = new ApplicationUser();
-            user.UserName = "Gestor" + NumberOfGestores + "@isec.com";
+            user.UserName = String.Format("Gestor{}@{}.com", NumberOfUsers, empresa.Nome);
             var result = await _userManager.CreateAsync(user, "Is3C..00");
 
             if(result.Succeeded)
@@ -97,9 +97,8 @@ namespace Rental4You.Controllers
                 ModelState.Remove(nameof(Empresa.Gestores));
                 if (ModelState.IsValid)
                 {
-                    
                     Gestor gestor = new Gestor();
-                    gestor.Nome = user.UserName;
+                    gestor.Nome = "Gestor" + NumberOfUsers;
                     gestor.ApplicationUser = user;
                     gestor.ApplicationUser.EmailConfirmed = true;
                     gestor.ApplicationUser.Ativo = true;

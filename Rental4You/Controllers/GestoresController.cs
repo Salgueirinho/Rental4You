@@ -68,10 +68,11 @@ namespace Rental4You.Controllers
             var empresa = _context.Empresas.Where(e => e.Id == gestorTemp.EmpresaId).FirstOrDefault();
             if (empresa == null)
                 return NotFound();
+            var name = gestor.Nome.Replace(" ", "");
             ApplicationUser user = new ApplicationUser();
             user.EmailConfirmed = true;
             user.Ativo = true;
-            user.UserName = gestor.Nome.Trim() + "@isec.com";
+            user.UserName = name + "@" + empresa.Nome + ".com";
             var result = await _userManager.CreateAsync(user, "Is3C..00");
             if (result.Succeeded)
             {
@@ -84,7 +85,7 @@ namespace Rental4You.Controllers
                     funcionario.ApplicationUser = user;
                     funcionario.Empresa = empresa;
                     funcionario.EmpresaId = empresa.Id;
-                    funcionario.Nome = gestor.Nome.Trim();
+                    funcionario.Nome = name;
                     gestor.ApplicationUser = user;
                     gestor.Empresa = empresa;
                     gestor.EmpresaId = empresa.Id;
