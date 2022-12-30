@@ -4,7 +4,7 @@ TODO
 //		data de entrega).
 //	○ O resultado da pesquisa deve ser uma lista dos veículos disponíveis, indicando o
 //		custo e a empresa de aluguer a que pertence, bem como a avaliação da empresa.
-/-	○ Deve ser possível filtrar os resultados por categoria de veículo e por empresa.
+//	○ Deve ser possível filtrar os resultados por categoria de veículo e por empresa.
 //	○ Deve ser possível ordenar os resultados por preço mais baixo/alto e/ou por
 		classificação da empresa.
 //	○ Efectuar o registo como Cliente.
@@ -18,7 +18,7 @@ TODO
 
 ● Área de funcionário de uma empresa de aluguer (Funcionário):
 //	○ Gerir a frota de veículos da empresa:
-/-		■ Listar registo de veículos - com filtros (categoria, estado) e com ordenação.
+//		■ Listar registo de veículos - com filtros (categoria, estado) e com ordenação.
 //		■ Adicionar registo de veículos;
 //		■ Editar registo de veículos;
 //		■ Apagar registo de veículos (apenas se já não existirem reservas desse
@@ -66,7 +66,7 @@ TODO
 
 ● Área de administrador da plataforma (Administrador)
 //	○ Gestão de empresas
-/-		■ Listar registo de empresas - com filtros (nome, estado da subscrição) e com
+//		■ Listar registo de empresas - com filtros (nome, estado da subscrição) e com
 //			ordenação.
 //		■ Adicionar registo de empresas - automaticamente cria um utilizador com perfil
 //			gestor, associado à empresa.

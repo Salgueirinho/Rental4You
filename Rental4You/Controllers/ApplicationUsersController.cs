@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Rental4You.Data;
 using Rental4You.Models;
 using Rental4You.ViewModels;
 
@@ -15,6 +17,8 @@ namespace PWEB_AulasP_2223.Controllers
             this._userManager = userManager;
             this._roleManager = roleManager;
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(ApplicationUser user)
         {
             var users = await _userManager.Users.ToListAsync();
@@ -40,6 +44,7 @@ namespace PWEB_AulasP_2223.Controllers
             return new List<string>(await _userManager.GetRolesAsync(user));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -59,6 +64,7 @@ namespace PWEB_AulasP_2223.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(ApplicationUserViewModel model, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

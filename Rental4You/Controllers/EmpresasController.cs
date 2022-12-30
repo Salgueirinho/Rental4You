@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,23 +27,33 @@ namespace Rental4You.Controllers
         }
 
         // GET: Empresas
-        public async Task<IActionResult> Index(bool? estado)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index(string? NomeEmpresa, string? Estado = "Todos")
         {
-            if(estado == null)
+            var estados = new List<String>();
+            estados.Add("Todos");
+            estados.Add("Ativo");
+            estados.Add("Inativo");
+            ViewData["Estados"] = new SelectList(estados);
+
+            if (Estado == null || Estado.Equals("Todos") && NomeEmpresa == null)
+            {
                 return View(await _context.Empresas.ToListAsync());
-            return View(await _context.Empresas.Where(e => e.EstadoSubscricao == estado).ToListAsync());
+            }
+            var estado = Estado.Equals("Ativo") ? true : false;
+            if (NomeEmpresa != null)
+            {
+                return View(await _context.Empresas.Where(e => e.EstadoSubscricao == estado &&
+                    e.Nome.ToLower().Contains(NomeEmpresa.ToLower())).ToListAsync());
+            } else
+            {
+                return View(await _context.Empresas.Where(e => e.EstadoSubscricao == estado).ToListAsync());
+            }
         }
 
-        //POST: Empresas
-        [HttpPost]
-        public async Task<IActionResult> Index(string TextoAPesquisar)
-        {
-            if (string.IsNullOrWhiteSpace(TextoAPesquisar))
-                return View(await _context.Empresas.ToListAsync());
-            return View(await _context.Empresas.Where(e => e.Nome.ToLower().Contains(TextoAPesquisar.ToLower())).ToListAsync());
-        }
 
         // GET: Empresas/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -60,6 +72,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Empresas/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -70,6 +83,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Nome,EstadoSubscricao,Avalicao")] Empresa empresa)
         {
             int NumberOfGestores = _context.Gestores.Count() + 1;
@@ -89,10 +103,16 @@ namespace Rental4You.Controllers
                     gestor.ApplicationUser = user;
                     gestor.ApplicationUser.EmailConfirmed = true;
                     gestor.ApplicationUser.Ativo = true;
+                    var funcionario = new Funcionario();
+                    funcionario.ApplicationUser = user;
+                    funcionario.Empresa = empresa;
+                    funcionario.EmpresaId = empresa.Id;
+                    funcionario.Nome = gestor.Nome.Trim();
                     _context.Add(empresa);
                     await _context.SaveChangesAsync();
                     gestor.EmpresaId = _context.Empresas.OrderBy(e => e.Id).Last().Id;
                     _context.Add(gestor);
+                    _context.Add(funcionario);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -102,6 +122,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Empresas/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -122,6 +143,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,EstadoSubscricao,Avalicao")] Empresa empresa)
         {
             if (id != empresa.Id)
@@ -153,6 +175,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Empresas/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -173,6 +196,7 @@ namespace Rental4You.Controllers
         // POST: Empresas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Empresas == null)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +22,14 @@ namespace Rental4You.Controllers
         }
 
         // GET: Categorias
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
               return View(await _context.Categorias.ToListAsync());
         }
 
         // GET: Categorias/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Categorias == null)
@@ -44,6 +48,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Categorias/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -66,6 +71,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Categorias/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Categorias == null)
@@ -86,6 +92,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descricao")] Categoria categoria)
         {
             if (id != categoria.Id)
@@ -117,6 +124,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Categorias/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Categorias == null)
@@ -136,6 +144,7 @@ namespace Rental4You.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Categorias == null)

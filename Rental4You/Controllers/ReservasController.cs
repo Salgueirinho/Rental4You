@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,6 +26,7 @@ namespace Rental4You.Controllers
             _userManager = userManager;
         }
 
+        
         private Empresa? getEmpresa()
         {
             var userId = _userManager.GetUserId(User);
@@ -47,6 +50,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Index()
         {
             var empresa = getEmpresa();
@@ -58,7 +62,7 @@ namespace Rental4You.Controllers
                 .Where(r => r.Veiculo.EmpresaId == empresa.Id);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> ReservasCliente()
         {
             var userId = _userManager.GetUserId(User);
@@ -73,6 +77,7 @@ namespace Rental4You.Controllers
         }
 
         //Get: Confirmar
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> ConfirmarReserva(int id)
         {
             var reserva = _context.Reservas.Where(r => r.Id == id).FirstOrDefault();
@@ -89,6 +94,7 @@ namespace Rental4You.Controllers
         }
 
         //Get: Rejeitar
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> RejeitarReserva(int id)
         {
             Console.WriteLine("Rejeitando reserva");
@@ -109,6 +115,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas/Details/5
+        [Authorize(Roles = "Gestor, Funcionario, Cliente")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Reservas == null)
@@ -146,6 +153,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas/Create
+        [Authorize(Roles = "Cliente")]
         public IActionResult Create(int? id, string? data_levantamento, string? data_entrega)
         {
             Console.WriteLine(data_levantamento);
@@ -184,7 +192,7 @@ namespace Rental4You.Controllers
         }
 
         // Get: Confirmar
-
+        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> Confirmar()
         {
             return RedirectToAction(nameof(ReservasCliente));
@@ -196,6 +204,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> Confirmar([Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva)
         {
             reserva.Confirmado = false;
@@ -239,6 +248,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas/Edit/5
+        [Authorize(Roles = "Funcionario, Gestor")]
         public async Task<IActionResult> EntregarVeiculo(int? id)
         {
             if (id == null || _context.Reservas == null)
@@ -265,6 +275,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas/Edit/5
+        [Authorize(Roles = "Funcionario, Gestor")]
         public async Task<IActionResult> ReceberVeiculo(int? id)
         {
             if (id == null || _context.Reservas == null)
@@ -295,6 +306,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva,
             [FromForm] List<IFormFile> DanoImagem)
         {
@@ -314,9 +326,7 @@ namespace Rental4You.Controllers
                     if (reserva.KilometrosFim < reserva.KilometrosInicio)
                         return NotFound();
                     veiculo.Kilometros = reserva.KilometrosFim?? veiculo.Kilometros;
-                    _context.Update(veiculo);
-                    _context.Update(reserva);
-                    await _context.SaveChangesAsync();
+                    
 
                     string path = Directory.GetCurrentDirectory();
                     Path.Combine(path, "wwwroot\\DanosImagens");
@@ -343,9 +353,12 @@ namespace Rental4You.Controllers
                             {
                                 await formFile.CopyToAsync(stream);
                             }
+                            veiculo.Danos = true;
                         }
                     }
-
+                    _context.Update(veiculo);
+                    _context.Update(reserva);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -364,6 +377,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Reservas/Delete/5
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Reservas == null)
@@ -388,6 +402,7 @@ namespace Rental4You.Controllers
         // POST: Reservas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Reservas == null)

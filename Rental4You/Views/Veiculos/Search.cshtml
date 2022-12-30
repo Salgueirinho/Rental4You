@@ -17,6 +17,10 @@
         <select asp-for="CategoriaId" class ="form-select" asp-items="ViewBag.CategoriaId"></select>
     </div>
     <div class="form-group">
+        <label name="EmpresaId" class="control-label">Empresa</label>
+        <select name="EmpresaId" class="form-select" asp-items="ViewBag.EmpresaId"></select>
+    </div>
+    <div class="form-group">
         <label asp-for="DataLevantamento" class="control-label"></label>
         <input asp-for="DataLevantamento" class="form-control" />
         <span asp-validation-for="DataLevantamento" class="text-danger"></span>

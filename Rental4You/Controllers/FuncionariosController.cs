@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,6 +27,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Funcionarios
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
@@ -36,8 +39,9 @@ namespace Rental4You.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-       
+
         // GET: Funcionarios/Create
+        [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
             var userId = _userManager.GetUserId(User);
@@ -54,6 +58,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Create([Bind("Id,Nome")] Funcionario funcionario)
         {
             var userId = _userManager.GetUserId(User);
@@ -87,6 +92,7 @@ namespace Rental4You.Controllers
             return View(funcionario);
         }
 
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int userId)
         {
             var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.Id == userId).FirstOrDefault();
@@ -114,6 +120,7 @@ namespace Rental4You.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(ApplicationUserViewModel model, int userId)
         {
             var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.Id == userId).FirstOrDefault();

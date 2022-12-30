@@ -113,15 +113,16 @@
                         {
                             <a class="btn-primary btn" asp-action="EntregarVeiculo" asp-route-id="@item.Id">Entregar Veiculo</a>
                         }
-                        else if(item.FuncionarioRecebeId == null)
+                        else if(item.FuncionarioRecebeId == null && User.IsInRole("Funcionario"))
                         {
+                            
                             <a class="btn-primary btn" asp-action="ReceberVeiculo" asp-route-id="@item.Id">Receber Veiculo</a>
+                            
                         } else {
-                                <span>Reserva feita com sucesso</span>
+                            <span>Reserva feita com sucesso</span>
                         }
                     } 
                 }
-                
             </td>
         </tr>
 }

@@ -50,17 +50,55 @@ namespace Rental4You.Controllers
         }
 
         // GET: Veiculos
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Gestor, Funcionario")]
+        public async Task<IActionResult> Index(string? Estado = "Todos", int? CategoriaId = 0)
         {
-            var applicationDbContext = _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa);
+            var categoriaTantofaz = new Categoria();
+            categoriaTantofaz.Id = 0;
+            categoriaTantofaz.Nome = "Todas";
+            var categoraiasSelect = new List<Categoria>();
+            categoraiasSelect.Add(categoriaTantofaz);
+            categoraiasSelect.AddRange(_context.Categorias);
+            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+            var estados = new List<String>();
+            estados.Add("Todos");
+            estados.Add("Disponivel");
+            estados.Add("Indisponivel");
+            ViewData["Estados"] = new SelectList(estados);
+
             var empresa = getEmpresa();
-            if(empresa == null)
+            if (empresa == null)
                 return NotFound();
+            var veiculos = new List<Veiculo>();
+            if (CategoriaId != 0)
+            {
+                if(Estado == null || Estado.Equals("Todos"))
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v=> v.CategoriaId == CategoriaId).ToListAsync();
+                else
+                {
+                    var estado = Estado.Equals("Disponivel") ? true : false;
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado && v.CategoriaId == CategoriaId).ToListAsync();
+                }
+            }
+            else
+            {
+                if(Estado == null || Estado.Equals("Todos"))
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
+                        .ToListAsync();
+                else
+                {
+                    var estado = Estado.Equals("Disponivel") ? true : false;
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado)
+                        .ToListAsync();
+                }
+            }
+
             ViewBag.NomeEmpresa = empresa.Nome;
-            return View(await applicationDbContext.ToListAsync());
+            return View(veiculos);
         }
 
-      
+       
+
         public bool VeiculoDisponivel(DateTime dataEntrega, DateTime dataLevantamento, int id)
         {
 
@@ -86,21 +124,67 @@ namespace Rental4You.Controllers
             }
             return true;
         }
-
-        [Authorize(Roles = "Cliente")]
-        public async Task<IActionResult> Search(string? Localizacao, int? CategoriaId, DateTime? DataLevantamento, DateTime? DataEntrega, string? sortBy)
+        [Authorize]
+        public async Task<IActionResult> Search(string? Localizacao, int? EmpresaId, int? CategoriaId, DateTime? DataLevantamento, DateTime? DataEntrega, string? sortBy)
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
+            var categoriaTantofaz = new Categoria();
+            categoriaTantofaz.Id = 0;
+            categoriaTantofaz.Nome = "Todas";
+            var categoraiasSelect = new List<Categoria>();
+            categoraiasSelect.Add(categoriaTantofaz);
+            categoraiasSelect.AddRange(_context.Categorias);
+            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+            var tantoFaz = new Empresa();
+            tantoFaz.Id = 0;
+            tantoFaz.Nome = "Todas";
+            var empresasSelect = new List<Empresa>();
+            empresasSelect.Add(tantoFaz);
+            empresasSelect.AddRange(_context.Empresas);
+            ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
+
             var pesquisaVM = new PesquisaVeiculosViewModel();
 
-            if (string.IsNullOrWhiteSpace(Localizacao) || CategoriaId==null || DataEntrega == null || DataLevantamento == null ||
+            if (string.IsNullOrWhiteSpace(Localizacao) || DataEntrega == null || DataLevantamento == null ||
                 CategoriaId == null)
                 pesquisaVM.ListaVeiculos = new List<Veiculo>() ;
             else
             {
-                var lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
-                    Where(c => c.Localizacao.Contains(Localizacao) && c.CategoriaId == CategoriaId && c.Disponivel == true
+                var lista = new List<Veiculo>();
+                if (EmpresaId == null || EmpresaId == 0)
+                {
+                   if(CategoriaId == null || CategoriaId == 0) {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                       Where(c => c.Localizacao.Contains(Localizacao) &&
+                       c.Disponivel == true && c.Empresa.EstadoSubscricao == true
+                            ).ToListAsync();
+                   } else
+                   {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                            Where(c => c.Localizacao.Contains(Localizacao) && c.CategoriaId == CategoriaId &&
+                            c.Disponivel == true && c.Empresa.EstadoSubscricao == true
+                                ).ToListAsync();
+                   }
+                   
+                }
+                else
+                {
+                    if (CategoriaId == null || CategoriaId == 0)
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                        Where(c => c.Localizacao.Contains(Localizacao) &&
+                        c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                             ).ToListAsync();
+                    }
+                    else
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                    Where(c => c.Localizacao.Contains(Localizacao) && c.CategoriaId == CategoriaId &&
+                    c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
                          ).ToListAsync();
+                    }
+                    
+                }
+                
                 pesquisaVM.ListaVeiculos = new List<Veiculo>();
                 foreach (var veiculo in lista)
                 {
@@ -133,10 +217,10 @@ namespace Rental4You.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Cliente")]
+        [Authorize]
         public async Task<IActionResult> Search(
             [Bind("Localizacao,CategoriaId,DataLevantamento,DataEntrega")]
-            PesquisaVeiculosViewModel pesquisaVeiculo, string? sortBy
+            PesquisaVeiculosViewModel pesquisaVeiculo, string? sortBy, int? EmpresaId
             )
         {
             ModelState.Remove(nameof(PesquisaVeiculosViewModel.ListaVeiculos));
@@ -147,10 +231,44 @@ namespace Rental4You.Controllers
             }
             else
             {
-                var lista =
-                    await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
-                    .Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId && c.Disponivel == true 
+                var lista = new List<Veiculo>();
+                if (EmpresaId == null || EmpresaId == 0)
+                {
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                       Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
+                       c.Disponivel == true && c.Empresa.EstadoSubscricao == true
+                            ).ToListAsync();
+                    }
+                    else
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                            Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
+                            c.Disponivel == true && c.Empresa.EstadoSubscricao == true
+                                ).ToListAsync();
+                    }
+
+                }
+                else
+                {
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                        Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
+                        c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                             ).ToListAsync();
+                    }
+                    else
+                    {
+                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                    Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
+                    c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
                          ).ToListAsync();
+                    }
+
+                }
+
                 pesquisaVeiculo.ListaVeiculos = new List<Veiculo>();
                 foreach(var veiculo in lista)
                 {
@@ -180,15 +298,27 @@ namespace Rental4You.Controllers
             }
             pesquisaVeiculo.NumResultados = pesquisaVeiculo.ListaVeiculos.Count();
 
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
+            var categoriaTantofaz = new Categoria();
+            categoriaTantofaz.Id = 0;
+            categoriaTantofaz.Nome = "Todas";
+            var categoraiasSelect = new List<Categoria>();
+            categoraiasSelect.Add(categoriaTantofaz);
+            categoraiasSelect.AddRange(_context.Categorias);
+            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+            var tantoFaz = new Empresa();
+            tantoFaz.Id = 0;
+            tantoFaz.Nome = "Todas";
+            var empresasSelect = new List<Empresa>();
+            empresasSelect.Add(tantoFaz);
+            empresasSelect.AddRange(_context.Empresas);
+            ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
             return View(pesquisaVeiculo);
-
-
         }
 
 
 
         // GET: Veiculos/Create
+        [Authorize(Roles = "Gestor, Funcionario")]
         public IActionResult Create()
         {
             var empresa = getEmpresa();
@@ -207,6 +337,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Create([Bind("Id,Marca,Modelo,CategoriaId,Localizacao,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
         {
             ModelState.Remove(nameof(Veiculo.Empresa));
@@ -229,6 +360,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Veiculos/Edit/5
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Edit(int? id)
         {
 
@@ -258,6 +390,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo,CategoriaId,Localizacao,NumeroLugares,Caixa,Disponivel,Custo,Danos,Kilometros,EmpresaId")] Veiculo veiculo)
         {
             if (id != veiculo.Id)
@@ -299,6 +432,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Veiculos/Delete/5
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Veiculos == null)
@@ -321,6 +455,7 @@ namespace Rental4You.Controllers
         // POST: Veiculos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor, Funcionario")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Veiculos == null)

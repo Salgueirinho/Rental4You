@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rental4You.Data;
@@ -18,12 +19,14 @@ namespace Rental4You.Controllers
             _context = context;
             _userManager = userManager;
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult AdminBoard()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDadosReservasDiarias()
         {
             //dados de exemplo
@@ -41,7 +44,7 @@ namespace Rental4You.Controllers
                 int quant = 0;
                 foreach( var r in reservas)
                 {
-                    if (r.DataConfirmada == dateTime)
+                    if (r.DataConfirmada.Date == dateTime.Date)
                         quant++;
                 }
                 dateTime = dateTime.AddDays(1);
@@ -60,6 +63,7 @@ namespace Rental4You.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDadosReservasMensais()
         {
             //dados de exemplo
@@ -78,7 +82,7 @@ namespace Rental4You.Controllers
                 int quant = 0;
                 foreach (var r in reservas)
                 {
-                    if (r.DataConfirmada.Month == dateTime.Month)
+                    if (r.DataConfirmada.Month == dateTime.Month && r.DataConfirmada.Year == dateTime.Year)
                         quant++;
                 }
                 dateTime = dateTime.AddMonths(1);
@@ -97,6 +101,7 @@ namespace Rental4You.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetClientesMensais()
         {
             //dados de exemplo
@@ -115,7 +120,7 @@ namespace Rental4You.Controllers
                 int quant = 0;
                 foreach (var c in clientes)
                 {
-                    if (c.ApplicationUser.DataRegisto.Month == dateTime.Month)
+                    if (c.ApplicationUser.DataRegisto.Month == dateTime.Month && c.ApplicationUser.DataRegisto.Year == dateTime.Year)
                         quant++;
                 }
                 dateTime = dateTime.AddMonths(1);

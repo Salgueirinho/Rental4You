@@ -20,7 +20,13 @@ namespace Rental4You.Controllers
 
         public IActionResult Index()
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome");
+            var categoriaTantofaz = new Categoria();
+            categoriaTantofaz.Id = 0;
+            categoriaTantofaz.Nome = "Todas";
+            var categoraiasSelect = new List<Categoria>();
+            categoraiasSelect.Add(categoriaTantofaz);
+            categoraiasSelect.AddRange(_context.Categorias);
+            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
             return View();
         }
 

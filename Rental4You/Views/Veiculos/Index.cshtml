@@ -7,6 +7,26 @@
 
 <h1>Veículos de @ViewBag.NomeEmpresa</h1>
 
+@using (Html.BeginForm("Index", "Veiculos", FormMethod.Get))
+{
+    <div class="form-inline d-flex ">
+
+        <div class="form-group">
+            <label name="CategoriaId" class="control-label">Categoria</label>
+            <select name="CategoriaId" class="form-select" asp-items="ViewBag.CategoriaId"></select>
+        </div>
+        <div class="form-group">
+            <label name="Estado" class="control-label">Estado</label>
+            <select name="Estado" class="form-select" asp-items="ViewBag.Estados"></select>
+        </div>
+
+        <button type="submit"
+            class="btn btn-default ms-2 me-2">
+            Filtrar
+        </button>
+    </div>
+}
+
 <p>
     <a asp-action="Create">Adicionar Veículo</a>
 </p>

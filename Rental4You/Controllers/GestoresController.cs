@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,6 +27,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Gestores
+        [Authorize(Roles = "Gestor, Admin")]
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
@@ -37,6 +40,7 @@ namespace Rental4You.Controllers
         }
 
         // GET: Gestores/Create
+        [Authorize(Roles = "Gestor, Admin")]
         public IActionResult Create()
         {
             var userId = _userManager.GetUserId(User);
@@ -53,6 +57,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor, Admin")]
         public async Task<IActionResult> Create([Bind("Id,Nome")] Gestor gestor)
         {
             var userId = _userManager.GetUserId(User);
@@ -75,10 +80,16 @@ namespace Rental4You.Controllers
                 ModelState.Remove(nameof(Gestor.ApplicationUser));
                 if (ModelState.IsValid)
                 {
+                    var funcionario = new Funcionario();
+                    funcionario.ApplicationUser = user;
+                    funcionario.Empresa = empresa;
+                    funcionario.EmpresaId = empresa.Id;
+                    funcionario.Nome = gestor.Nome.Trim();
                     gestor.ApplicationUser = user;
                     gestor.Empresa = empresa;
                     gestor.EmpresaId = empresa.Id;
                     _context.Add(gestor);
+                    _context.Add(funcionario);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
