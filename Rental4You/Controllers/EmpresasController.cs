@@ -88,7 +88,7 @@ namespace Rental4You.Controllers
         {
             int NumberOfUsers = _userManager.Users.Count() + 1;
             ApplicationUser user = new ApplicationUser();
-            user.UserName = String.Format("Gestor{}@{}.com", NumberOfUsers, empresa.Nome);
+            user.UserName = String.Format("Gestor{0:d}@{1}.com", NumberOfUsers, empresa.Nome);
             var result = await _userManager.CreateAsync(user, "Is3C..00");
 
             if(result.Succeeded)

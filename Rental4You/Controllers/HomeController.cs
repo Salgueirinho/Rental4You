@@ -19,14 +19,33 @@ namespace Rental4You.Controllers
         }
 
         public IActionResult Index()
-        {
-            var categoriaTantofaz = new Categoria();
-            categoriaTantofaz.Id = 0;
-            categoriaTantofaz.Nome = "Todas";
-            var categoraiasSelect = new List<Categoria>();
-            categoraiasSelect.Add(categoriaTantofaz);
-            categoraiasSelect.AddRange(_context.Categorias);
-            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+        {   
+            // Create a "All" category with an Id of 0
+            var todasCategorias = new Categoria { Id = 0, Nome = "Todas" };
+
+            // Get the list of categories from the database
+            var categorias = _context.Categorias.ToList();
+
+            // Insert the "All" category at the beginning of the list
+            categorias.Insert(0, todasCategorias);
+            ViewData["CategoriaId"] = new SelectList(categorias, "Id", "Nome");
+            // Get a list of all vehicles from the database
+            var veiculos = _context.Veiculos.ToList();
+            // Create a list to store the unique localizations
+            var localizacoes = new List<string>();
+
+            // Loop through each vehicle in the list
+            foreach (var v in veiculos)
+            {
+                // If the localization is not already in the list, add it
+                if (!localizacoes.Contains(v.Localizacao))
+                {
+                    localizacoes.Add(v.Localizacao);
+                }
+            }
+
+            // Set the ViewBag property to the list of unique localizations
+            ViewData["Localizacoes"] = new SelectList(localizacoes,"Localizacao");
             return View();
         }
 
