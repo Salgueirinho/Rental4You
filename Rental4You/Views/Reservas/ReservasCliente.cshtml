@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Minhas Reservas";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
 
 <h1>As Minhas Reservas</h1>
@@ -95,10 +95,10 @@
                     @Html.DisplayFor(modelItem => item.Cliente.ApplicationUser.UserName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FuncionarioEntrega.Id)
+                    @Html.DisplayFor(modelItem => item.FuncionarioEntrega.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FuncionarioRecebe.Id)
+                    @Html.DisplayFor(modelItem => item.FuncionarioRecebe.Nome)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ObservacoesInicio)

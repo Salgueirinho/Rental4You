@@ -217,7 +217,6 @@ namespace Rental4You.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Search(
             [Bind("Localizacao,CategoriaId,DataLevantamento,DataEntrega")]
             PesquisaVeiculosViewModel pesquisaVeiculo, string? sortBy, int? EmpresaId

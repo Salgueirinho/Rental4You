@@ -23,7 +23,7 @@
                 <span asp-validation-for="Modelo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoriaId" class="control-label"></label>
+                <label asp-for="CategoriaId" class="control-label">Nome da Categoria</label>
                 <select asp-for="CategoriaId" class ="form-control" asp-items="ViewBag.CategoriaId"></select>
             </div>
             <div class="form-group">
@@ -38,7 +38,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Caixa" /> @Html.DisplayNameFor(model => model.Caixa)
+                    <input class="form-check-input" asp-for="Caixa" /> Caixa Manual
                 </label>
             </div>
             <div class="form-group form-check">
@@ -61,7 +61,7 @@
                 <input asp-for="Kilometros" class="form-control" />
                 <span asp-validation-for="Kilometros" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="EmpresaId" class="control-label" hidden></label>
                 <select asp-for="EmpresaId" class ="form-control" asp-items="ViewBag.EmpresaId" hidden></select>
             </div>

@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Reservas - @ViewBag.NomeEmpresa</h1>
+<h1 class="mb-4 mx-4">Reservas - @ViewBag.NomeEmpresa</h1>
 
-<div class="d-flex justify-content-center">
-<table class="table mx-auto">
+<div class="d-flex justify-content-center mx-4">
+    <table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>
@@ -78,7 +78,7 @@
                     {
                             <span class="badge bg-dark text-white">Rejeitado</span>
                     } else {
-                        <div>Por confirmar</div>
+                            <span class="badge bg-dark text-white">Por confirmar</span>
                     }
                 }
             </td>
@@ -103,7 +103,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ObservacoesFim)
             </td>
-            <td>
+                <td class="row">
                 @if(item.Confirmado == false) {
                     <a class="btn-primary btn align-center" asp-action="ConfirmarReserva" asp-route-id="@item.Id">Confirmar</a>
                     <a class="btn-primary btn align-center" asp-action="RejeitarReserva" asp-route-id="@item.Id">Rejeitar</a>
@@ -119,7 +119,7 @@
                             <a class="btn-primary btn" asp-action="ReceberVeiculo" asp-route-id="@item.Id">Receber Veiculo</a>
                             
                         } else {
-                            <span>Reserva feita com sucesso</span>
+                                    <span class="badge bg-dark text-white">Reserva feita com sucesso</span>
                         }
                     } 
                 }

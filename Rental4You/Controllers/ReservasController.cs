@@ -306,7 +306,7 @@ namespace Rental4You.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Funcionario")]
+        [Authorize(Roles = "Funcionario, Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva,
             [FromForm] List<IFormFile> DanoImagem)
         {
