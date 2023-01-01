@@ -71,12 +71,13 @@
 else
 {
     <p class="alert alert-success">Existe(m) @Model.NumResultados Veiculos(s) disponiveis</p>
+    <h1 class="">Veículos</h1>
 }
 
 
 <div class="row px-3">
     @{
-        <h1 class="">Veículos</h1>
+        
         foreach (var item in Model.ListaVeiculos)
         {
             <div class="col-md-6 col-lg-4 mb-3">

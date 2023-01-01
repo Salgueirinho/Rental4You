@@ -29,10 +29,13 @@ namespace Rental4You.Controllers
             // Insert the "All" category at the beginning of the list
             categorias.Insert(0, todasCategorias);
             ViewData["CategoriaId"] = new SelectList(categorias, "Id", "Nome");
+
             // Get a list of all vehicles from the database
             var veiculos = _context.Veiculos.ToList();
             // Create a list to store the unique localizations
             var localizacoes = new List<string>();
+
+            localizacoes.Add("Todas");
 
             // Loop through each vehicle in the list
             foreach (var v in veiculos)

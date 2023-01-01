@@ -3,10 +3,10 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Detalhes";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
 
-<h1>Detalhes do utilizador</h1>
+
 @if(Model.UserId == UserManager.GetUserId(User)){
     <p class="alert alert-warning">
             Não pode desativar a sua própia conta.
@@ -16,12 +16,12 @@
 <form method="post">
     <div class="card">
         <div class="card-header">
-            <h2>Editar estado do utilizador </h2>
-            <span class="badge bg-dark text-white">@Model.UserName</span>
+                <h2>Editar estado do utilizador <span class="badge bg-dark text-white">@Model.UserName</span></h2>
+            
         </div>
         <div class="card-body">
             <div>
-                <label class="form-check-label">
+                <label class="form-check-label mb-2">
                     <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
                 </label>
             </div>

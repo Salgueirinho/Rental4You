@@ -134,6 +134,7 @@ namespace Rental4You.Controllers
             categoraiasSelect.Add(categoriaTantofaz);
             categoraiasSelect.AddRange(_context.Categorias);
             ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+
             var tantoFaz = new Empresa();
             tantoFaz.Id = 0;
             tantoFaz.Nome = "Todas";
@@ -141,6 +142,18 @@ namespace Rental4You.Controllers
             empresasSelect.Add(tantoFaz);
             empresasSelect.AddRange(_context.Empresas);
             ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
+
+            var veiculos = _context.Veiculos.ToList();
+            var localizacoes = new List<string>();
+            localizacoes.Add("Todas");
+            foreach (var v in veiculos)
+            {
+                if (!localizacoes.Contains(v.Localizacao))
+                {
+                    localizacoes.Add(v.Localizacao);
+                }
+            }
+            ViewData["Localizacoes"] = new SelectList(localizacoes, "Localizacao");
 
             var pesquisaVM = new PesquisaVeiculosViewModel();
 
@@ -152,7 +165,7 @@ namespace Rental4You.Controllers
                 var lista = new List<Veiculo>();
                 if (EmpresaId == null || EmpresaId == 0)
                 {
-                   if(CategoriaId == null || CategoriaId == 0) {
+                   if(CategoriaId == null || CategoriaId == 0 || Localizacao == "Todas") {
                         lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                        Where(c => c.Localizacao.Contains(Localizacao) &&
                        c.Disponivel == true && c.Empresa.EstadoSubscricao == true
@@ -168,7 +181,7 @@ namespace Rental4You.Controllers
                 }
                 else
                 {
-                    if (CategoriaId == null || CategoriaId == 0)
+                    if (CategoriaId == null || CategoriaId == 0 || Localizacao == "Todas")
                     {
                         lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                         Where(c => c.Localizacao.Contains(Localizacao) &&
@@ -233,7 +246,7 @@ namespace Rental4You.Controllers
                 var lista = new List<Veiculo>();
                 if (EmpresaId == null || EmpresaId == 0)
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0 || pesquisaVeiculo.Localizacao == "Todas")
                     {
                         lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                        Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
@@ -251,7 +264,7 @@ namespace Rental4You.Controllers
                 }
                 else
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0 || pesquisaVeiculo.Localizacao == "Todas")
                     {
                         lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                         Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
@@ -304,6 +317,7 @@ namespace Rental4You.Controllers
             categoraiasSelect.Add(categoriaTantofaz);
             categoraiasSelect.AddRange(_context.Categorias);
             ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+
             var tantoFaz = new Empresa();
             tantoFaz.Id = 0;
             tantoFaz.Nome = "Todas";
@@ -311,6 +325,19 @@ namespace Rental4You.Controllers
             empresasSelect.Add(tantoFaz);
             empresasSelect.AddRange(_context.Empresas);
             ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
+
+            var veiculos = _context.Veiculos.ToList();
+            var localizacoes = new List<string>();
+            localizacoes.Add("Todas");
+            foreach (var v in veiculos)
+            {
+                if (!localizacoes.Contains(v.Localizacao))
+                {
+                    localizacoes.Add(v.Localizacao);
+                }
+            }
+            ViewData["Localizacoes"] = new SelectList(localizacoes, "Localizacao");
+
             return View(pesquisaVeiculo);
         }
 
