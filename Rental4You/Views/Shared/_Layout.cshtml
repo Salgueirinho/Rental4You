@@ -53,6 +53,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Index" asp-controller="Gestores" asp-action="">Gestores</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Dashboards" asp-action="GestorBoard">Dashboard</a>
+                            </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {

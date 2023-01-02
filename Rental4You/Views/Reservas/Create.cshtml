@@ -73,6 +73,11 @@
                 <span asp-validation-for="ObservacoesFim" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Valor" class="control-label" hidden></label>
+                <input asp-for="Valor" class="form-control" readonly hidden/>
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Reservar" class="btn btn-success" />
             </div>
         </form>

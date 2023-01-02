@@ -402,6 +402,9 @@ namespace Rental4You.Data.Migrations
                     b.Property<string>("ObservacoesInicio")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("VeiculoId")
                         .HasColumnType("int");
 

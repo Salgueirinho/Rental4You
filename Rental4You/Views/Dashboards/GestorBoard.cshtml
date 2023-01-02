@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Gestor DashBoard";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
+}
+<div>
+    <canvas id="faturacaoSemanal"></canvas>
+</div>
+<div>
+    <canvas id="faturacaoMensal"></canvas>
+</div>
+<div>
+    <canvas id="clientesMensais"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $.ajax({
+            type: "POST",
+            url: "/Dashboards/GetFaturacaoSemanal",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                let Labels = data[0];
+                let Datasets1 = data[1];
+                let dataT = {
+                    labels: Labels,
+                    datasets: [{
+                        label: "Faturação alcançada esta semana",
+                        data: Datasets1,
+                        fill: true,
+                        borderWidth: 1,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        
+                    }]
+                };
+                let ctx = $("#faturacaoSemanal").get(0).getContext("2d");
+                let myNewChart = new Chart(ctx, {
+                    type: 'line',
+                    fill: true,
+                    showLine: true,
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        title: { display: true, text: 'Faturação' },
+                        legend: { position: 'bottom' },
+                        scales: {
+                           y:{
+                               beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 10
+                           }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script>
+        $.ajax({
+            type: "POST",
+            url: "/Dashboards/GetFaturacaoMensal",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                let Labels = data[0];
+                let Datasets1 = data[1];
+                let dataT = {
+                    labels: Labels,
+                    datasets: [{
+                        label: "Faturação alcançada esta semana",
+                        data: Datasets1,
+                        fill: true,
+                        borderWidth: 1,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+
+                    }]
+                };
+                let ctx = $("#faturacaoMensal").get(0).getContext("2d");
+                let myNewChart = new Chart(ctx, {
+                    type: 'line',
+                    fill: true,
+                    showLine: true,
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        title: { display: true, text: 'Faturação' },
+                        legend: { position: 'bottom' },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 10
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+    
+
+ }
+
+

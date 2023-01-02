@@ -186,6 +186,7 @@ namespace Rental4You.Controllers
             reserva.DataInicio = dataLevantamento;
             reserva.DataFim = dataEntrega;
             reserva.KilometrosInicio = veiculo.Kilometros;
+            reserva.Valor = preco;
 
             ViewBag.PrecoReserva = preco;
             return View(reserva);
@@ -205,7 +206,7 @@ namespace Rental4You.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Cliente")]
-        public async Task<IActionResult> Confirmar([Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva)
+        public async Task<IActionResult> Confirmar([Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim,Valor")] Reserva reserva)
         {
             reserva.Confirmado = false;
             reserva.Estado = false;
@@ -307,7 +308,7 @@ namespace Rental4You.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Funcionario, Gestor")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim")] Reserva reserva,
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VeiculoId,KilometrosInicio,KilometrosFim,Estado,DataInicio,DataFim,ClienteId,FuncionarioEntregaId,FuncionarioRecebeId,ObservacoesInicio,ObservacoesFim,Valor")] Reserva reserva,
             [FromForm] List<IFormFile> DanoImagem)
         {
             if (id != reserva.Id)

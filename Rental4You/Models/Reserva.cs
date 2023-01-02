@@ -37,5 +37,8 @@ namespace Rental4You.Models
 
         [DataType(DataType.Date)]
         public DateTime DataConfirmada { get; set; }
+
+        [Display(Name = "Custo")]
+        public decimal Valor { get;set; }
     }
 }

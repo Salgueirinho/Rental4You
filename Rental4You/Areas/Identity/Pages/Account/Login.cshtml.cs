@@ -117,8 +117,8 @@ namespace Rental4You.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user.Ativo && !await _userManager.IsLockedOutAsync(user)) {
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    if (user.Ativo) {
                         _logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }

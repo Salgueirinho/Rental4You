@@ -48,6 +48,9 @@
                 @Html.DisplayNameFor(model => model.ObservacoesFim)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
                 Ações
             </th>
         </tr>
@@ -105,6 +108,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ObservacoesFim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)
                 </td>
                 <td>
                     @if (item.Confirmado == false)
