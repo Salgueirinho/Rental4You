@@ -74,6 +74,7 @@ namespace PWEB_AulasP_2223.Controllers
             }
             user.Ativo = model.Ativo;
             var result = await _userManager.UpdateAsync(user);
+            
 
             if (!result.Succeeded)
             {

@@ -223,7 +223,8 @@ namespace Rental4You.Controllers
                     _context.Empresas.Remove(empresa);
                 } else
                 {
-                    return Problem("A empresa tem veículos associados");
+                    TempData["WarningMessage"] = "Atenção! A empresa tem veículos associados";
+                    return RedirectToAction("Delete");
                 }
             }
             await _context.SaveChangesAsync();

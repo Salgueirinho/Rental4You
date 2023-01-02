@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Reservar Veiculo";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
 
 <h1>Reservar Veiculo</h1>
@@ -45,7 +45,7 @@
                 <input asp-for="DataInicio" class="form-control" readonly value="@Model.DataInicio.ToString("yyyy-MM-dd")"/>
                 <span asp-validation-for="DataInicio" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="DataFim" class="control-label"></label>
                 <input asp-for="DataFim" class="form-control" readonly  value="@Model.DataFim.ToString("yyyy-MM-dd")"/>
                 <span asp-validation-for="DataFim" class="text-danger"></span>
@@ -73,7 +73,7 @@
                 <span asp-validation-for="ObservacoesFim" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Reservar" class="btn btn-success" />
             </div>
         </form>
     </div>

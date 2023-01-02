@@ -46,6 +46,27 @@
                         <div class="mb-3 mb-md-0 col-md-3 mt-3">
                             <input type="submit" class="btn btn-primary btn-block py-3" value="Pesquisar" />
                         </div>
+                        <div class="mb-3 mb-md-0">
+                            <div class="form-control-wrap">
+                                <label>Ordenar por:</label>
+                                <div class="form-check form-check-inline">
+                                    <input asp-route-sort="Pmais" class="form-check-input" type="radio" name="sortBy" value="Pmais">
+                                    <label class="form-check-label" for="Pmais">Preço mais alto</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input asp-route-sort="Pmenos" class="form-check-input" type="radio" name="sortBy" value="Pmenos">
+                                    <label class="form-check-label" for="Pmenos">Preço mais baixo</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input asp-route-sort="Rmais" class="form-check-input" type="radio" name="sortBy" value="Rmais">
+                                    <label class="form-check-label" for="Rmais">Rating mais alto</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input asp-route-sort="Rmenos" class="form-check-input" type="radio" name="sortBy" value="Rmenos">
+                                    <label class="form-check-label" for="Rmenos">Rating mais baixo</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

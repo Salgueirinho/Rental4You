@@ -38,3 +38,8 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning mt-2">@TempData["WarningMessage"]</div>
+}

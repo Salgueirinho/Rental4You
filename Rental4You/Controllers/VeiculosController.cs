@@ -246,25 +246,42 @@ namespace Rental4You.Controllers
                 var lista = new List<Veiculo>();
                 if (EmpresaId == null || EmpresaId == 0)
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0 || pesquisaVeiculo.Localizacao == "Todas")
-                    {
-                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
-                       Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
-                       c.Disponivel == true && c.Empresa.EstadoSubscricao == true
-                            ).ToListAsync();
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    {   
+                        if(pesquisaVeiculo.Localizacao == "Todas")
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
+                                .Where(c => c.Disponivel == true && c.Empresa.EstadoSubscricao == true).ToListAsync();
+                        } else
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
+                                .Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.Disponivel == true && c.Empresa.EstadoSubscricao == true).ToListAsync();
+                        }
+                        
+                        
                     }
                     else
                     {
-                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                        if (pesquisaVeiculo.Localizacao == "Todas")
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                            Where(c => c.CategoriaId == pesquisaVeiculo.CategoriaId &&
+                            c.Disponivel == true && c.Empresa.EstadoSubscricao == true
+                                ).ToListAsync();
+                        } else
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                             Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
                             c.Disponivel == true && c.Empresa.EstadoSubscricao == true
                                 ).ToListAsync();
+                        }
+                            
                     }
 
                 }
                 else
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0 || pesquisaVeiculo.Localizacao == "Todas")
+                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
                     {
                         lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                         Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&

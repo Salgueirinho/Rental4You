@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Reservas";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
 
 <h1 class="mb-4 mx-4">Reservas - @ViewBag.NomeEmpresa</h1>
@@ -113,13 +113,11 @@
                         {
                             <a class="btn-primary btn" asp-action="EntregarVeiculo" asp-route-id="@item.Id">Entregar Veiculo</a>
                         }
-                        else if(item.FuncionarioRecebeId == null && User.IsInRole("Funcionario"))
+                        else if(item.FuncionarioRecebeId == null)
                         {
                             
                             <a class="btn-primary btn" asp-action="ReceberVeiculo" asp-route-id="@item.Id">Receber Veiculo</a>
                             
-                        } else {
-                                    <span class="badge bg-dark text-white">Reserva feita com sucesso</span>
                         }
                     } 
                 }
