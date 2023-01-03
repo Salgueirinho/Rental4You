@@ -139,6 +139,7 @@ namespace Rental4You.Controllers
                 return NotFound();
             }
             user.Ativo = model.Ativo;
+            user.EmailConfirmed = model.Ativo;
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)

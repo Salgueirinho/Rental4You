@@ -73,6 +73,7 @@ namespace PWEB_AulasP_2223.Controllers
                 return NotFound();
             }
             user.Ativo = model.Ativo;
+            user.EmailConfirmed = user.Ativo;
             var result = await _userManager.UpdateAsync(user);
             
 
