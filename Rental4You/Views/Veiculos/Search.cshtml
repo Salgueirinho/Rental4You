@@ -29,6 +29,10 @@
                             <label asp-for="CategoriaId" class="control-label">Tipo de Categoria</label>
                             <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
                         </div>
+                        <div class="mb-3 mb-md-0 col-md-2">
+                            <label class="control-label">Empresa</label>
+                            <select name="EmpresaId" class="form-control" asp-items="ViewBag.EmpresaId"></select>
+                        </div>
                         <div class="mb-3 mb-md-0 col-md-3">
                             <div class="form-control-wrap">
                                 <label asp-for="DataLevantamento" class="control-label"></label>
@@ -77,6 +81,7 @@
 <script>
     document.getElementById("start-date").addEventListener("change", function () {
         var startDate = this.value;
+
         document.getElementById("end-date").setAttribute("min", startDate);
     });
 </script>
@@ -98,47 +103,51 @@ else
 
 <div class="row px-3">
     @{
-        
-        foreach (var item in Model.ListaVeiculos)
+
+        if (Model.ListaVeiculos != null)
         {
-            <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card justify-content-center text-center">
-                    <div class="img-square-wrapper">
-                        <img class="card-img" src="@String.Format("https://cdn.imagin.studio/getImage?customer=copyright-imaginstudio&make={0}&modelFamily={1}&paintId=pspc0003&angle=20&width=2600&zoomType=fullscreen", @item.Marca, item.Modelo)" />
-                    </div>
-                    <div class="card-body">
-                        <div class="card-header">
-                            @item.Marca <small>@item.Modelo</small>
-                        </div>
-                        <div class="">
-                            @item.Categoria.Nome
-                        </div>
-                        <div class="">
-                            @item.NumeroLugares lugares
-                        </div>
-                        @if (item.Caixa)
-                        {
-                            <div>Manual</div>
-                        }
-                        else
-                        {
-                            <div>Automático</div>
-                        }
-                        <div>
-                            @item.Custo €/dia
-                        </div>
-                        <div>
-                            @item.Empresa.Nome
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a asp-controller="Reservas" asp-action="Create" asp-route-id="@item.Id"
-                   asp-route-data_levantamento="@Model.DataLevantamento.ToString()" asp-route-data_entrega="@Model.DataEntrega.ToString()"
-                   class="w-100 btn btn-lg btn-outline-primary">Reservar</a>
-                    </div>
-                </div>
-            </div>
+            foreach (var item in Model.ListaVeiculos)
+            {
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card justify-content-center text-center">
+                                    <div class="img-square-wrapper">
+                                        <img class="card-img" src="@String.Format("https://cdn.imagin.studio/getImage?customer=copyright-imaginstudio&make={0}&modelFamily={1}&paintId=pspc0003&angle=20&width=2600&zoomType=fullscreen", @item.Marca, item.Modelo)" />
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            @item.Marca <small>@item.Modelo</small>
+                                        </div>
+                                        <div class="">
+                                            @item.Categoria.Nome
+                                        </div>
+                                        <div class="">
+                                            @item.NumeroLugares lugares
+                                        </div>
+                                        @if (item.Caixa)
+                            {
+                                            <div>Manual</div>
+                            }
+                            else
+                            {
+                                            <div>Automático</div>
+                            }
+                                        <div>
+                                            @item.Custo €/dia
+                                        </div>
+                                        <div>
+                                            @item.Empresa.Nome
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a asp-controller="Reservas" asp-action="Create" asp-route-id="@item.Id"
+                       asp-route-data_levantamento="@Model.DataLevantamento.ToString()" asp-route-data_entrega="@Model.DataEntrega.ToString()"
+                       class="w-100 btn btn-lg btn-outline-primary">Reservar</a>
+                                    </div>
+                                </div>
+                            </div>
+            }
         }
+
     }
 </div>
 

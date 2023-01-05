@@ -12,6 +12,9 @@
     <canvas id="clientesMensais"></canvas>
 </div>
 
+
+
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -52,7 +55,7 @@
                                     stepSize: 1
                                 },
                                 suggestedMin: 0,
-                                suggestedMax: 10
+                                suggestedMax: 800
                            }
                         }
                     }
@@ -73,7 +76,7 @@
                 let dataT = {
                     labels: Labels,
                     datasets: [{
-                        label: "Faturação alcançada esta semana",
+                        label: "Faturação alcançada este mês",
                         data: Datasets1,
                         fill: true,
                         borderWidth: 1,
@@ -99,7 +102,7 @@
                                     stepSize: 1
                                 },
                                 suggestedMin: 0,
-                                suggestedMax: 10
+                                suggestedMax: 800
                             }
                         }
                     }

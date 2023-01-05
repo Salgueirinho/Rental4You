@@ -52,6 +52,17 @@ namespace Rental4You.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [Route("home/404")]
+        public IActionResult PageNotFound()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -235,6 +235,38 @@ namespace Rental4You.Controllers
             PesquisaVeiculosViewModel pesquisaVeiculo, string? sortBy, int? EmpresaId
             )
         {
+            var categoriaTantofaz = new Categoria();
+            categoriaTantofaz.Id = 0;
+            categoriaTantofaz.Nome = "Todas";
+            var categoraiasSelect = new List<Categoria>();
+            categoraiasSelect.Add(categoriaTantofaz);
+            categoraiasSelect.AddRange(_context.Categorias);
+            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
+
+            var tantoFaz = new Empresa();
+            tantoFaz.Id = 0;
+            tantoFaz.Nome = "Todas";
+            var empresasSelect = new List<Empresa>();
+            empresasSelect.Add(tantoFaz);
+            empresasSelect.AddRange(_context.Empresas);
+            ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
+
+            var veiculos = _context.Veiculos.ToList();
+            var localizacoes = new List<string>();
+            localizacoes.Add("Todas");
+            foreach (var v in veiculos)
+            {
+                if (!localizacoes.Contains(v.Localizacao))
+                {
+                    localizacoes.Add(v.Localizacao);
+                }
+            }
+            ViewData["Localizacoes"] = new SelectList(localizacoes, "Localizacao");
+            if (pesquisaVeiculo.DataEntrega == pesquisaVeiculo.DataLevantamento)
+            {
+                pesquisaVeiculo.ListaVeiculos = new List<Veiculo>();
+                return View(pesquisaVeiculo);
+            }
             ModelState.Remove(nameof(PesquisaVeiculosViewModel.ListaVeiculos));
             ModelState.Remove(nameof(PesquisaVeiculosViewModel.NumResultados));
             if (string.IsNullOrEmpty(pesquisaVeiculo.Localizacao) || !ModelState.IsValid)
@@ -246,7 +278,7 @@ namespace Rental4You.Controllers
                 var lista = new List<Veiculo>();
                 if (EmpresaId == null || EmpresaId == 0)
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    if (pesquisaVeiculo.CategoriaId == 0)
                     {   
                         if(pesquisaVeiculo.Localizacao == "Todas")
                         {
@@ -268,7 +300,8 @@ namespace Rental4You.Controllers
                             Where(c => c.CategoriaId == pesquisaVeiculo.CategoriaId &&
                             c.Disponivel == true && c.Empresa.EstadoSubscricao == true
                                 ).ToListAsync();
-                        } else
+                        } 
+                        else
                         {
                             lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
                             Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
@@ -281,19 +314,39 @@ namespace Rental4You.Controllers
                 }
                 else
                 {
-                    if (pesquisaVeiculo.CategoriaId == null || pesquisaVeiculo.CategoriaId == 0)
+                    if (pesquisaVeiculo.CategoriaId == 0)
                     {
-                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
-                        Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
-                        c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
-                             ).ToListAsync();
+                        if (pesquisaVeiculo.Localizacao == "Todas")
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                                Where(c => c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                                     ).ToListAsync();
+                        } 
+                        else
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                                                            Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) &&
+                                                            c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                                                                 ).ToListAsync();
+                        }
                     }
                     else
                     {
-                        lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
-                    Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
-                    c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
-                         ).ToListAsync();
+                        if (pesquisaVeiculo.Localizacao == "Todas")
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                                        Where(c => c.CategoriaId == pesquisaVeiculo.CategoriaId &&
+                                        c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                                             ).ToListAsync();
+                        }
+                        else
+                        {
+                            lista = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).
+                                                Where(c => c.Localizacao.Contains(pesquisaVeiculo.Localizacao) && c.CategoriaId == pesquisaVeiculo.CategoriaId &&
+                                                c.Disponivel == true && c.Empresa.EstadoSubscricao == true && c.EmpresaId == EmpresaId
+                                                     ).ToListAsync();
+                        }
+                            
                     }
 
                 }
@@ -327,33 +380,7 @@ namespace Rental4You.Controllers
             }
             pesquisaVeiculo.NumResultados = pesquisaVeiculo.ListaVeiculos.Count();
 
-            var categoriaTantofaz = new Categoria();
-            categoriaTantofaz.Id = 0;
-            categoriaTantofaz.Nome = "Todas";
-            var categoraiasSelect = new List<Categoria>();
-            categoraiasSelect.Add(categoriaTantofaz);
-            categoraiasSelect.AddRange(_context.Categorias);
-            ViewData["CategoriaId"] = new SelectList(categoraiasSelect, "Id", "Nome");
-
-            var tantoFaz = new Empresa();
-            tantoFaz.Id = 0;
-            tantoFaz.Nome = "Todas";
-            var empresasSelect = new List<Empresa>();
-            empresasSelect.Add(tantoFaz);
-            empresasSelect.AddRange(_context.Empresas);
-            ViewData["EmpresaId"] = new SelectList(empresasSelect, "Id", "Nome");
-
-            var veiculos = _context.Veiculos.ToList();
-            var localizacoes = new List<string>();
-            localizacoes.Add("Todas");
-            foreach (var v in veiculos)
-            {
-                if (!localizacoes.Contains(v.Localizacao))
-                {
-                    localizacoes.Add(v.Localizacao);
-                }
-            }
-            ViewData["Localizacoes"] = new SelectList(localizacoes, "Localizacao");
+            
 
             return View(pesquisaVeiculo);
         }

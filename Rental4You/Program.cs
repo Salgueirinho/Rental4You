@@ -20,6 +20,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.ConfigureApplicationCookie(options => {
+    options.AccessDeniedPath = new PathString("/home/AccessDenied");
+});
 
 var app = builder.Build();
 
@@ -57,10 +60,12 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStatusCodePagesWithReExecute("/home/{0}");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
 
 app.Run();

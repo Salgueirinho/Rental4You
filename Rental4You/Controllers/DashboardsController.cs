@@ -146,7 +146,6 @@ namespace Rental4You.Controllers
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> GetFaturacaoSemanal()
         {
-            //dados de exemplo
             List<object> dados = new List<object>();
 
             DataTable dt = new DataTable();
@@ -185,7 +184,6 @@ namespace Rental4You.Controllers
         [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> GetFaturacaoMensal()
         {
-            //dados de exemplo
             List<object> dados = new List<object>();
 
             DataTable dt = new DataTable();
@@ -206,7 +204,6 @@ namespace Rental4You.Controllers
                 }
                 dateTime = dateTime.AddDays(1);
                 dr["Quantidade"] = faturacao;
-                faturacao = 0;
                 dt.Rows.Add(dr);
             }
 
