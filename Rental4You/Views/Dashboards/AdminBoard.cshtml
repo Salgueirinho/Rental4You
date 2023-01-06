@@ -2,16 +2,24 @@
     ViewData["Title"] = "Admin DashBoard";
     Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
-<div>
-    <canvas id="reservasDiarias"></canvas>
-</div>
-<div>
-    <canvas id="reservasMensais"></canvas>
-</div>
-<div>
-    <canvas id="clientesMensais"></canvas>
-</div>
 
+
+<div class="text-center">
+    <h2>Reservas diárias nos últimos 30 dias</h2>
+    <div >
+        <canvas id="reservasDiarias"></canvas>
+    </div>
+    <br />
+    <h2>Reservas mensais nos últimos 12 meses</h2>
+    <div>
+        <canvas id="reservasMensais"></canvas>
+    </div>
+    <br />
+    <h2>Clientes novos por mês nos últimos 12 meses</h2>
+    <div>
+        <canvas id="clientesMensais"></canvas>
+    </div>
+</div>
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -77,7 +85,7 @@
                         data: Datasets1,
                         fill: true,
                         borderWidth: 1,
-                        borderColor: 'rgb(75, 192, 192)',
+                        borderColor: 'rgb(255, 80, 80)',
                         tension: 0.1,
 
                     }]
@@ -131,7 +139,7 @@
                 };
                 let ctx = $("#clientesMensais").get(0).getContext("2d");
                 let myNewChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     fill: true,
                     showLine: true,
                     data: dataT,

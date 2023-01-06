@@ -2,14 +2,26 @@
     ViewData["Title"] = "Gestor DashBoard";
     Layout = "~/Views/Shared/_Layout_2.cshtml";
 }
-<div>
-    <canvas id="faturacaoSemanal"></canvas>
-</div>
-<div>
-    <canvas id="faturacaoMensal"></canvas>
-</div>
-<div>
-    <canvas id="clientesMensais"></canvas>
+<div class="text-center">
+    <h2>Faturação total na última semana</h2>
+    <div>
+        <canvas id="faturacaoSemanal"></canvas>
+    </div>
+    <br>
+    <h2>Faturação total no último mês</h2>
+    <div>
+        <canvas id="faturacaoMensal"></canvas>
+    </div>
+    <br>
+    <h2>Número médio de reservas diárias nos últimos 30 dias</h2>
+    <div>
+        <p>12 (TESTE)</p>
+    </div>
+    <br>
+    <h2>Número de reservas diárias nos últimos 30 dias</h2>
+    <div>
+        <canvas id="reservasDiarias"></canvas>
+    </div>
 </div>
 
 
@@ -110,6 +122,54 @@
             }
         });
     </script>
+
+    <script>
+        $.ajax({
+            type: "POST",
+            url: "/Dashboards/GetDadosReservasDiarias",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                let Labels = data[0];
+                let Datasets1 = data[1];
+                let dataT = {
+                    labels: Labels,
+                    datasets: [{
+                        label: "Nº de Reservas Diárias dos últimos 30 dias",
+                        data: Datasets1,
+                        fill: true,
+                        borderWidth: 1,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+
+                    }]
+                };
+                let ctx = $("#reservasDiarias").get(0).getContext("2d");
+                let myNewChart = new Chart(ctx, {
+                    type: 'line',
+                    fill: true,
+                    showLine: true,
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        title: { display: true, text: 'Nº de Reservas' },
+                        legend: { position: 'bottom' },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 10
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
 
     
 

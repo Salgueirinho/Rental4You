@@ -194,7 +194,7 @@ namespace Rental4You.Controllers
 
         // Get: Confirmar
         [Authorize(Roles = "Cliente")]
-        public async Task<IActionResult> Confirmar()
+        public IActionResult Confirmar()
         {
             return RedirectToAction(nameof(ReservasCliente));
         }
@@ -257,8 +257,8 @@ namespace Rental4You.Controllers
                 return NotFound();
             }
 
-            var reserva = _context.Reservas.Include(r => r.Cliente).Include(r=>r.Cliente.ApplicationUser)
-                .Include(r => r.Veiculo).Where(r => r.Id == id).FirstOrDefault();
+            var reserva = await _context.Reservas.Include(r => r.Cliente).Include(r=>r.Cliente.ApplicationUser)
+                .Include(r => r.Veiculo).Where(r => r.Id == id).FirstOrDefaultAsync();
             if (reserva == null)
             {
                 return NotFound();
@@ -284,8 +284,8 @@ namespace Rental4You.Controllers
                 return NotFound();
             }
 
-            var reserva = _context.Reservas.Include(r => r.Cliente).Include(r => r.Cliente.ApplicationUser)
-                .Include(r => r.Veiculo).Where(r => r.Id == id).FirstOrDefault();
+            var reserva = await _context.Reservas.Include(r => r.Cliente).Include(r => r.Cliente.ApplicationUser)
+                .Include(r => r.Veiculo).Where(r => r.Id == id).FirstOrDefaultAsync();
             if (reserva == null)
             {
                 return NotFound();

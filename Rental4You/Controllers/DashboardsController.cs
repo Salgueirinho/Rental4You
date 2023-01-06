@@ -30,7 +30,7 @@ namespace Rental4You.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Gestor")]
         public async Task<IActionResult> GetDadosReservasDiarias()
         {
             //dados de exemplo
@@ -40,7 +40,7 @@ namespace Rental4You.Controllers
             dt.Columns.Add("Reservas", System.Type.GetType("System.String"));
             dt.Columns.Add("Quantidade", System.Type.GetType("System.Int32"));
 
-            var reservas = _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-30)).ToList();
+            var reservas = await _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-30)).ToListAsync();
             DateTime dateTime = DateTime.Now.AddDays(-30);
             while(dateTime <= DateTime.Now) {
                 DataRow dr = dt.NewRow();
@@ -77,7 +77,7 @@ namespace Rental4You.Controllers
             dt.Columns.Add("Reservas", System.Type.GetType("System.String"));
             dt.Columns.Add("Quantidade", System.Type.GetType("System.Int32"));
 
-            var reservas = _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddMonths(-12)).ToList();
+            var reservas = await _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddMonths(-12)).ToListAsync();
             DateTime dateTime = DateTime.Now.AddMonths(-12);
             while (dateTime <= DateTime.Now)
             {
@@ -115,7 +115,7 @@ namespace Rental4You.Controllers
             dt.Columns.Add("Clientes", System.Type.GetType("System.String"));
             dt.Columns.Add("Quantidade", System.Type.GetType("System.Int32"));
 
-            var clientes = _context.Clientes.Include(c => c.ApplicationUser).Where(c => c.ApplicationUser.DataRegisto > DateTime.Now.AddMonths(-12)).ToList();
+            var clientes = await _context.Clientes.Include(c => c.ApplicationUser).Where(c => c.ApplicationUser.DataRegisto > DateTime.Now.AddMonths(-12)).ToListAsync();
             DateTime dateTime = DateTime.Now.AddMonths(-12);
             while (dateTime <= DateTime.Now)
             {
@@ -152,7 +152,7 @@ namespace Rental4You.Controllers
             dt.Columns.Add("Faturação", System.Type.GetType("System.String"));
             dt.Columns.Add("Quantidade", System.Type.GetType("System.Int32"));
 
-            var reservas = _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-7)).ToList();
+            var reservas = await _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-7)).ToListAsync();
             DateTime dateTime = DateTime.Now.AddDays(-7);
             while (dateTime <= DateTime.Now)
             {
@@ -190,7 +190,7 @@ namespace Rental4You.Controllers
             dt.Columns.Add("Faturação", System.Type.GetType("System.String"));
             dt.Columns.Add("Quantidade", System.Type.GetType("System.Int32"));
 
-            var reservas = _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-30)).ToList();
+            var reservas = await _context.Reservas.Where(r => r.DataConfirmada > DateTime.Now.AddDays(-30)).ToListAsync();
             DateTime dateTime = DateTime.Now.AddDays(-30);
             while (dateTime <= DateTime.Now)
             {
