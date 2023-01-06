@@ -59,7 +59,9 @@
                 @Html.DisplayFor(modelItem => item.Veiculo.Id)
             </td>
             <td>
-                @item.Veiculo.Marca <small>@item.Veiculo.Modelo</small>
+                @if(item.Veiculo != null) {
+                    @item.Veiculo.Marca <small>@item.Veiculo.Modelo</small>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.KilometrosInicio)
@@ -89,13 +91,19 @@
                 @Html.DisplayFor(modelItem => item.DataFim)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cliente.ApplicationUser.UserName)
+                @if(item.Cliente != null) {
+                    @Html.DisplayFor(modelItem => item.Cliente.ApplicationUser.UserName)
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FuncionarioEntrega.Nome)
+                @if(item.FuncionarioEntrega != null) {
+                    @Html.DisplayFor(modelItem => item.FuncionarioEntrega.Nome)
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FuncionarioRecebe.Nome)
+                @if(item.FuncionarioRecebe != null) {
+                    @Html.DisplayFor(modelItem => item.FuncionarioRecebe.Nome)
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ObservacoesInicio)

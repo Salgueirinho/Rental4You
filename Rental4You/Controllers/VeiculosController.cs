@@ -73,22 +73,22 @@ namespace Rental4You.Controllers
             if (CategoriaId != 0)
             {
                 if(Estado == null || Estado.Equals("Todos"))
-                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v=> v.CategoriaId == CategoriaId).ToListAsync();
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v=> v.CategoriaId == CategoriaId && v.EmpresaId == empresa.Id).ToListAsync();
                 else
                 {
                     var estado = Estado.Equals("Disponivel") ? true : false;
-                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado && v.CategoriaId == CategoriaId).ToListAsync();
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado && v.CategoriaId == CategoriaId && v.EmpresaId == empresa.Id).ToListAsync();
                 }
             }
             else
             {
                 if(Estado == null || Estado.Equals("Todos"))
-                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa)
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.EmpresaId == empresa.Id)
                         .ToListAsync();
                 else
                 {
                     var estado = Estado.Equals("Disponivel") ? true : false;
-                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado)
+                    veiculos = await _context.Veiculos.Include(v => v.Categoria).Include(v => v.Empresa).Where(v => v.Disponivel == estado && v.EmpresaId == empresa.Id)
                         .ToListAsync();
                 }
             }

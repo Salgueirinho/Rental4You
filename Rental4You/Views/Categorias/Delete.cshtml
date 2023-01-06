@@ -7,6 +7,10 @@
 
 <h1>Delete</h1>
 
+@if(ViewBag.Erro != null) {
+    <h3 class="text-danger">Erro: @ViewBag.Erro</h3>
+}
+
 <h3 class="text-danger">Tem a certeza que quer remover esta categoria?</h3>
 <div>
     <h4>Categoria</h4>

@@ -133,6 +133,12 @@ namespace Rental4You.Controllers
             }
             var categoria = await _context.Categorias
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if(categoria == null || _context.Veiculos.Where(v => v.CategoriaId == categoria.Id).ToList().Count() >= 0)
+            {
+                ViewBag.Erro = "Não podes eliminar esta categoria";
+                return View(categoria);
+            }
+
             if (categoria == null)
             {
                 return NotFound();
@@ -152,6 +158,11 @@ namespace Rental4You.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Categoria'  is null.");
             }
             var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null || _context.Veiculos.Where(v => v.CategoriaId == categoria.Id).ToList().Count() >= 0)
+            {
+                ViewBag.Erro = "Não podes eliminar esta categoria";
+                return View(categoria);
+            }
             if (categoria != null)
             {
                 _context.Categorias.Remove(categoria);

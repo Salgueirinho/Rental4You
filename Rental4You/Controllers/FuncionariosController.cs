@@ -36,7 +36,9 @@ namespace Rental4You.Controllers
             if (gestor == null)
                 return (NotFound());
 
-            var applicationDbContext = _context.Funcionarios.Include(f => f.Empresa).Include(f=>f.ApplicationUser).Where(f => _userManager.GetUsersInRoleAsync("Funcionario").Result.Contains(f.ApplicationUser));
+            var applicationDbContext = _context.Funcionarios.Include(f => f.Empresa).Include(f=>f.ApplicationUser).Where(f => _userManager.GetUsersInRoleAsync("Funcionario").Result.Contains(f.ApplicationUser)
+                && f.EmpresaId == gestor.EmpresaId
+                );
             return View(await applicationDbContext.ToListAsync());
         }
 

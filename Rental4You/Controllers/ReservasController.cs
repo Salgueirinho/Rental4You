@@ -88,6 +88,7 @@ namespace Rental4You.Controllers
                 reserva.Confirmado = true;
                 reserva.Estado = true;
             }
+            Console.WriteLine(reserva.Valor);
             _context.Update(reserva);
             await _context.SaveChangesAsync();
             return (RedirectToAction(nameof(Index)));
