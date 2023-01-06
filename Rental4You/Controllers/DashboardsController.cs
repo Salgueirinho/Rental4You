@@ -24,8 +24,26 @@ namespace Rental4You.Controllers
         {
             return View();
         }
-        public IActionResult GestorBoard()
+        public  IActionResult GestorBoard()
         {
+            var reservas_semana = _context.Reservas.Where(r => r.DataConfirmada >= DateTime.Now.AddDays(-7)).ToList();
+            decimal faturacaoSemanal = 0;
+            foreach(var reserva in reservas_semana)
+            {
+                faturacaoSemanal += reserva.Valor;
+            }
+            ViewBag.FaturacaoSemanal = faturacaoSemanal;
+            var reservas_mes = _context.Reservas.Where(r => r.DataConfirmada >= DateTime.Now.AddDays(-30)).ToList();
+            decimal faturacaoMensal = 0;
+            foreach (var reserva in reservas_semana)
+            {
+                faturacaoMensal += reserva.Valor;
+            }
+            ViewBag.FaturacaoMensal = faturacaoMensal;
+
+            var n_reservas = _context.Reservas.Where(r => r.DataConfirmada >= DateTime.Now.AddDays(-30))
+                .ToList().Count();
+            ViewBag.NumeroMedioReservas = n_reservas / 30;
             return View();
         }
 

@@ -55,14 +55,14 @@ TODO
 //		■ Não pode apagar nem desativar o seu próprio registo de utilizador.
 //	○ Gestão de reservas (igual ao perfil Funcionário).
 //	○ Gestão da frota de veículos (igual ao perfil Funcionário).
-	○ A seguinte funcionalidade é de implementação opcional e caso seja realizada essa
+//	○ A seguinte funcionalidade é de implementação opcional e caso seja realizada essa
 		implementação a nota final, caso seja igual ou superior a 65%, é valorizada 10% num
 		máximo total de 100%
 		■ Dashboard com dados relativos ao negócio:
-			● Valor de facturação nos últimos 7 dias
-			● Valor de facturação nos últimos 30 dias
-			● N.º médio de reservas diárias nos últimos 30 dias.
-			● Gráfico com o número de reservas por dia (30 dias).
+//			● Valor de facturação nos últimos 7 dias
+//			● Valor de facturação nos últimos 30 dias
+//			● N.º médio de reservas diárias nos últimos 30 dias.
+//			● Gráfico com o número de reservas por dia (30 dias).
 
 ● Área de administrador da plataforma (Administrador)
 //	○ Gestão de empresas
@@ -76,7 +76,7 @@ TODO
 //	○ Gestão de categorias de veículos
 //		■ Listar, criar, editar, apagar registos
 //	○ Gestão de utilizadores
-//		■ Listar, editar, ativar, inativar registos
+//		■ Listar, _editar, ativar, inativar registos
 //	○ De acordo com o atrás já referido para os Dashboard para os Gestores
 //		■ Dashboard com informação sobre a performance das reservas
 //			● Gráficos
@@ -84,7 +84,6 @@ TODO
 //				○ N.º de reservas mensais (últimos 12 meses).
 //				○ N.º de clientes novos por mês (últimos 12 meses).
 
-
-MELHORAR INTERFACE ETC
-Warnings
-Pagina 404
+Outros:
+//	AccessDenied Customizada
+//  Página 404 Customizada

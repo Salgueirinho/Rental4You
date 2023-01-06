@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Rental4You.Data;
 using Rental4You.Models;
 
 namespace Rental4You.Areas.Identity.Pages.Account.Manage
@@ -17,13 +19,16 @@ namespace Rental4You.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -56,6 +61,20 @@ namespace Rental4You.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Email")]
+            public string Email { get; set; }
+
+            [Display(Name = "NIF")]
+            public int NIF { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -70,6 +89,10 @@ namespace Rental4You.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                FirstName = user.PrimeiroNome,
+                LastName = user.UltimoNome,
+                NIF = user.NIF,
+                Email = user.Email,
                 PhoneNumber = phoneNumber
             };
         }
@@ -109,6 +132,48 @@ namespace Rental4You.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.FirstName != user.PrimeiroNome)
+            {
+                user.PrimeiroNome = Input.FirstName;
+            }
+            if (Input.LastName != user.UltimoNome)
+            {
+                user.UltimoNome = Input.LastName;
+            }
+            if (Input.NIF != user.NIF)
+            {
+                user.NIF = Input.NIF;
+            }
+
+            if (User.IsInRole("Gestor"))
+            {
+                var gestor = _context.Gestores.Include(g => g.ApplicationUser).Where(g => g.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (gestor == null)
+                    return NotFound();
+                gestor.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+
+                var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (funcionario == null)
+                    return NotFound();
+                funcionario.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+                _context.Update(funcionario);
+                _context.Update(gestor);
+                _context.SaveChanges();
+            }
+
+            if (User.IsInRole("Funcionario"))
+            {
+                var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (funcionario == null)
+                    return NotFound();
+                funcionario.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+                _context.Update(funcionario);
+                _context.SaveChanges();
             }
 
             await _signInManager.RefreshSignInAsync(user);

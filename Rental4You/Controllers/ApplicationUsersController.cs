@@ -12,10 +12,14 @@ namespace PWEB_AulasP_2223.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public ApplicationUsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly ApplicationDbContext _context;
+        public ApplicationUsersController(UserManager<ApplicationUser> userManager, 
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
+            _context = context;
         }
 
         [Authorize(Roles = "Admin")]
@@ -73,9 +77,39 @@ namespace PWEB_AulasP_2223.Controllers
                 return NotFound();
             }
             user.Ativo = model.Ativo;
+            user.PrimeiroNome = model.PrimeiroNome;
+            user.UltimoNome = model.UltimoNome;
             user.EmailConfirmed = user.Ativo;
             var result = await _userManager.UpdateAsync(user);
-            
+
+            if (User.IsInRole("Gestor"))
+            {
+                var gestor = _context.Gestores.Include(g => g.ApplicationUser).Where(g => g.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (gestor == null)
+                    return NotFound();
+                gestor.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+
+                var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (funcionario == null)
+                    return NotFound();
+                funcionario.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+                _context.Update(funcionario);
+                _context.Update(gestor);
+                _context.SaveChanges();
+            }
+
+            if (User.IsInRole("Funcionario"))
+            {
+                var funcionario = _context.Funcionarios.Include(f => f.ApplicationUser).Where(f => f.ApplicationUser.Id == user.Id)
+                    .FirstOrDefault();
+                if (funcionario == null)
+                    return NotFound();
+                funcionario.Nome = (user.PrimeiroNome + user.UltimoNome).Trim().Replace(" ", "");
+                _context.Update(funcionario);
+                _context.SaveChanges();
+            }
 
             if (!result.Succeeded)
             {

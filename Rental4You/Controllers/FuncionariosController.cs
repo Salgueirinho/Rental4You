@@ -75,6 +75,7 @@ namespace Rental4You.Controllers
             user.EmailConfirmed = true;
             user.Ativo = true;
             user.UserName = name + "@" + empresa.Nome + ".com";
+            user.Email = user.UserName;
             var result = await _userManager.CreateAsync(user, "Is3C..00");
             if (result.Succeeded)
             {

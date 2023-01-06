@@ -5,17 +5,31 @@
 <div class="text-center">
     <h2>Faturação total na última semana</h2>
     <div>
+        @if (ViewBag.FaturacaoSemanal != null)
+        {
+            <h3>@ViewBag.FaturacaoSemanal €</h3>
+        }
+    </div>
+    <div>
         <canvas id="faturacaoSemanal"></canvas>
     </div>
     <br>
     <h2>Faturação total no último mês</h2>
+    <div>
+        @if (ViewBag.FaturacaoMensal != null)
+        {
+            <h3>@ViewBag.FaturacaoMensal €</h3>
+        }
+    </div>
     <div>
         <canvas id="faturacaoMensal"></canvas>
     </div>
     <br>
     <h2>Número médio de reservas diárias nos últimos 30 dias</h2>
     <div>
-        <p>12 (TESTE)</p>
+        @if(ViewBag.NumeroMedioReservas != null) {
+            <h3>@ViewBag.NumeroMedioReservas reservas</h3>
+        }
     </div>
     <br>
     <h2>Número de reservas diárias nos últimos 30 dias</h2>
@@ -52,7 +66,7 @@
                 };
                 let ctx = $("#faturacaoSemanal").get(0).getContext("2d");
                 let myNewChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     fill: true,
                     showLine: true,
                     data: dataT,
